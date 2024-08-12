@@ -1,0 +1,70 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\KhanhNguyen9872\\source\\repos\\AFGForm\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{E2C0D3F1-0EE6-47A7-A897-B6E7C7421A00}|AFGForm\\AFGForm.csproj|c:\\users\\khanhnguyen9872\\source\\repos\\afgform\\afgform\\main.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E2C0D3F1-0EE6-47A7-A897-B6E7C7421A00}|AFGForm\\AFGForm.csproj|solutionrelative:afgform\\main.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E2C0D3F1-0EE6-47A7-A897-B6E7C7421A00}|AFGForm\\AFGForm.csproj|c:\\users\\khanhnguyen9872\\source\\repos\\afgform\\afgform\\main.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
+      "RelativeMoniker": "D:0:0:{E2C0D3F1-0EE6-47A7-A897-B6E7C7421A00}|AFGForm\\AFGForm.csproj|solutionrelative:afgform\\main.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E2C0D3F1-0EE6-47A7-A897-B6E7C7421A00}|AFGForm\\AFGForm.csproj|c:\\users\\khanhnguyen9872\\source\\repos\\afgform\\afgform\\main.designer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E2C0D3F1-0EE6-47A7-A897-B6E7C7421A00}|AFGForm\\AFGForm.csproj|solutionrelative:afgform\\main.designer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 1,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "Main.Designer.cs",
+              "DocumentMoniker": "C:\\Users\\KhanhNguyen9872\\source\\repos\\AFGForm\\AFGForm\\Main.Designer.cs",
+              "RelativeDocumentMoniker": "AFGForm\\Main.Designer.cs",
+              "ToolTip": "C:\\Users\\KhanhNguyen9872\\source\\repos\\AFGForm\\AFGForm\\Main.Designer.cs",
+              "RelativeToolTip": "AFGForm\\Main.Designer.cs",
+              "ViewState": "AQIAAFwAAAAAAAAAAAAnwGwAAABAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-08-12T13:20:23.034Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "Main.cs",
+              "DocumentMoniker": "C:\\Users\\KhanhNguyen9872\\source\\repos\\AFGForm\\AFGForm\\Main.cs",
+              "RelativeDocumentMoniker": "AFGForm\\Main.cs",
+              "ToolTip": "C:\\Users\\KhanhNguyen9872\\source\\repos\\AFGForm\\AFGForm\\Main.cs",
+              "RelativeToolTip": "AFGForm\\Main.cs",
+              "ViewState": "AQIAAA8BAAAAAAAAAAAIwBoBAAAQAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-08-12T13:08:45.239Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "Main.cs [Design]",
+              "DocumentMoniker": "C:\\Users\\KhanhNguyen9872\\source\\repos\\AFGForm\\AFGForm\\Main.cs",
+              "RelativeDocumentMoniker": "AFGForm\\Main.cs",
+              "ToolTip": "C:\\Users\\KhanhNguyen9872\\source\\repos\\AFGForm\\AFGForm\\Main.cs [Design]",
+              "RelativeToolTip": "AFGForm\\Main.cs [Design]",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-08-12T12:56:54.446Z",
+              "EditorCaption": " [Design]"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
