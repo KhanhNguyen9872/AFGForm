@@ -37,13 +37,14 @@ namespace AFGForm
             this.buttonWhileStopped();
             btnStart.Enabled = false;
             btnRandomAll.Enabled = false;
+            btnIgnoreOtherAll.Enabled = false;
         }
 
         private void dataGridView1_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             int index = dataGridView1.CurrentRow.Index;
 
-            if (dataGridView1.CurrentCell.ColumnIndex == 4)
+            if ((dataGridView1.CurrentCell.ColumnIndex == 4) || (dataGridView1.CurrentCell.ColumnIndex == 5))
             {
                 return;
             }
@@ -85,12 +86,56 @@ namespace AFGForm
             numSec.Value = 1;
             btnStart.Enabled = false;
             btnStop.Enabled = false;
+            tbURL.ReadOnly = false;
             this.reloadResult();
         }
 
         private async void btnGetData_Click(object sender, EventArgs e)
         {
-            if (tbURL.Text.Contains("/viewform"))
+            if (string.IsNullOrEmpty(tbURL.Text))
+            {
+                MessageBox.Show("URL is empty!", "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                return;
+            }
+
+            if (!tbURL.Text.Contains("https://"))
+            {
+                tbURL.Text = "https://" + tbURL.Text;
+            }
+
+            if (tbURL.Text.Contains("http://"))
+            {
+                tbURL.Text = tbURL.Text.Replace("http://", "https://");
+            }
+
+            LoadingForm fm = new LoadingForm();
+            fm.Show();
+
+            if (tbURL.Text.Contains("https://forms.gle/"))
+            {
+                HttpResponseMessage response;
+                try
+                {
+                    response = await client.GetAsync(tbURL.Text);
+                    string url = response.RequestMessage.RequestUri.AbsoluteUri.ToString();
+                    if (string.IsNullOrEmpty(url))
+                    {
+                        MessageBox.Show("Cannot get form URL!", "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        fm.Dispose();
+                        return;
+                    }
+
+                    tbURL.Text = url;
+                } catch (Exception ex)
+                {
+                    MessageBox.Show("Network error!", "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    fm.Dispose();
+                    return;
+                }
+                
+            }
+
+            if ((tbURL.Text.Contains("https://docs.google.com/forms/d/e/")) && (tbURL.Text.Contains("/viewform")))
             {
                 tbURL.Text = tbURL.Text.Split('?')[0];
 
@@ -113,6 +158,8 @@ namespace AFGForm
                     {
                         btnStart.Enabled = true;
                         btnRandomAll.Enabled = true;
+                        btnIgnoreOtherAll.Enabled = true;
+                        tbURL.ReadOnly = true;
                     } else
                     {
                         btnStart.Enabled = false;
@@ -126,6 +173,7 @@ namespace AFGForm
             {
                 MessageBox.Show("Wrong URL (a URL must have /viewform)", "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+            fm.Dispose();
             return;
         }
 
@@ -135,6 +183,7 @@ namespace AFGForm
             int i = 1;
             foreach (var s in this.dataURL)
             {
+                bool isEnableIgnore = false;
                 DataGridViewRow row = new DataGridViewRow();
                 row.CreateCells(dataGridView1);
                 row.Cells[0].Value = i;
@@ -143,15 +192,30 @@ namespace AFGForm
                 foreach (var ss in s.Value)
                 {
                     row.Cells[2].Value = ss.Key;
+                    row.Cells[3].Value = null;
                     foreach(string sss in ss.Value)
                     {
-                        row.Cells[3].Value = sss;
-                        break;
+                        if (row.Cells[3].Value == null)
+                        {
+                            row.Cells[3].Value = sss;
+                        }
+
+                        if ((string.IsNullOrEmpty(sss)) || sss.Equals(" "))
+                        {
+                            isEnableIgnore = true;
+                            break;
+                        }
                     }
                     break;
                 }
 
                 row.Cells[4].Value = false;
+                row.Cells[5].Value = false;
+
+                if (!isEnableIgnore)
+                {
+                    row.Cells[5].ReadOnly = true;
+                }
                 dataGridView1.Rows.Add(row);
                 i = i + 1;
             }
@@ -271,6 +335,7 @@ namespace AFGForm
             tbURL.ReadOnly = true;
             dataGridView1.Enabled = false;
             btnRandomAll.Enabled = false;
+            btnIgnoreOtherAll.Enabled = false;
 
             lbRUNNING.Text = "RUNNING";
             lbRUNNING.ForeColor = System.Drawing.Color.Green;
@@ -290,6 +355,7 @@ namespace AFGForm
             tbURL.ReadOnly = false;
             dataGridView1.Enabled = true;
             btnRandomAll.Enabled = true;
+            btnIgnoreOtherAll.Enabled = true;
 
             lbRUNNING.Text = "STOPPED";
             lbRUNNING.ForeColor = System.Drawing.Color.Red;
@@ -332,22 +398,34 @@ namespace AFGForm
                     string question = row.Cells[2].Value.ToString();
                     var data = row.Cells[3].Value;
                     bool isRandom = Convert.ToBoolean(row.Cells[4].Value);
+                    bool isIgnore = Convert.ToBoolean(row.Cells[5].Value);
+                    bool isIgnoreReadOnly = row.Cells[5].ReadOnly;
 
                     string answer = "";
                     bool isRandomStr = false;
 
+                    var q = this.dataURL[id][question];
                     if (isRandom)
                     {
-                        var q = this.dataURL[id][question];
                         if (q.Count > 0)
                         {
-                            int rand = random.Next(0, q.Count);
-                            answer = q[rand];
-
-                            if (string.IsNullOrEmpty(answer))
+                            if (isIgnore)
                             {
-                                answer = this.randomString(random.Next(5, 30));
-                                isRandomStr = true;
+                                do
+                                {
+                                    int rand = random.Next(0, q.Count);
+                                    answer = q[rand];
+                                } while (string.IsNullOrEmpty(answer));
+                            } else
+                            {
+                                int rand = random.Next(0, q.Count);
+                                answer = q[rand];
+
+                                if (string.IsNullOrEmpty(answer))
+                                {
+                                    answer = this.randomString(random.Next(5, 30));
+                                    isRandomStr = true;
+                                }
                             }
                         }
                         else
@@ -367,7 +445,15 @@ namespace AFGForm
                         }
                     }
 
-                    if (isRandomStr)
+                    if (!isRandomStr)
+                    {
+                        if (notIn(q, answer))
+                        {
+                            isRandomStr = true;
+                        }
+                    }
+
+                    if ((isRandomStr) && (!isIgnoreReadOnly))
                     {
                         values.Add(new KeyValuePair<string, string>("entry." + id.ToString() + ".other_option_response", answer));
                         values.Add(new KeyValuePair<string, string>("entry." + id.ToString(), "__other_option__"));
@@ -403,9 +489,24 @@ namespace AFGForm
                 }
             }
 
-            MessageBox.Show("Done all!", "Done", MessageBoxButtons.OK, MessageBoxIcon.Information);
             this.buttonWhileStopped();
             this.thread = null;
+            MessageBox.Show("Completed all jobs!", "Done", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+
+        private bool notIn(List<string> q, string answer)
+        {
+            bool check = true;
+            foreach(string s in q)
+            {
+                if (answer.Equals(s))
+                {
+                    check = false;
+                    break;
+                }
+            }
+
+            return check;
         }
 
         private void sleep(int seconds)
@@ -419,6 +520,23 @@ namespace AFGForm
 
         private void btnStart_Click(object sender, EventArgs e)
         {
+            foreach(DataGridViewRow row in dataGridView1.Rows)
+            {
+                if ((row.Cells[3].Value == null) || (string.IsNullOrEmpty(row.Cells[3].Value.ToString())))
+                {
+                    if (!Convert.ToBoolean(row.Cells[4].Value.ToString()))
+                    {
+                        if (MessageBox.Show("Found empty answer from [ID: " + row.Cells[0].Value.ToString() + "]\nDo you want to continue?", "WARNING", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
+                        {
+                            break;
+                        }
+                        else
+                        {
+                            return;
+                        }
+                    }
+                }
+            }
             this.thread = new Thread(this.process);
             this.thread.IsBackground = true;
             this.thread.Start();
@@ -491,6 +609,30 @@ namespace AFGForm
             this.thread.Abort();
             this.thread = null;
             this.buttonWhileStopped();
+        }
+
+        private void Main_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (MessageBox.Show("Do you want to exit?", "EXIT PROGRAM", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
+            {
+                return;
+            }
+            e.Cancel = true;
+        }
+
+        private void btnIgnoreOtherAll_Click(object sender, EventArgs e)
+        {
+            if (dataGridView1.Rows.Count > 0)
+            {
+                foreach (DataGridViewRow row in dataGridView1.Rows)
+                {
+                    if (row.Cells[5].ReadOnly)
+                    {
+                        continue;
+                    }
+                    row.Cells[5].Value = true;
+                }
+            }
         }
 
         private void numRepeat_TextChanged(object sender, EventArgs e)

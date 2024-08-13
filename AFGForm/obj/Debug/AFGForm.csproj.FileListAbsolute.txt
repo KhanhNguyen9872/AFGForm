@@ -57,3 +57,7 @@ C:\Users\KhanhNguyen9872\Documents\GitHub\AFGForm\AFGForm\obj\Debug\AFGForm.cspr
 C:\Users\KhanhNguyen9872\Documents\GitHub\AFGForm\AFGForm\obj\Debug\AFGForm.csproj.Up2Date
 C:\Users\KhanhNguyen9872\Documents\GitHub\AFGForm\AFGForm\obj\Debug\AFGForm.exe
 C:\Users\KhanhNguyen9872\Documents\GitHub\AFGForm\AFGForm\obj\Debug\AFGForm.pdb
+C:\Users\KhanhNguyen9872\Documents\GitHub\AFGForm\AFGForm\obj\Debug\AFGForm.LoadingForm.resources
+C:\Users\KhanhNguyen9872\Documents\GitHub\AFGForm\AFGForm\bin\Debug\en-US\AFGForm.resources.dll
+C:\Users\KhanhNguyen9872\Documents\GitHub\AFGForm\AFGForm\obj\Debug\AFGForm.Main.en-US.resources
+C:\Users\KhanhNguyen9872\Documents\GitHub\AFGForm\AFGForm\obj\Debug\en-US\AFGForm.resources.dll

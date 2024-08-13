@@ -28,9 +28,9 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Main));
             this.label1 = new System.Windows.Forms.Label();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.btnRandomAll = new System.Windows.Forms.Button();
             this.numTo = new System.Windows.Forms.NumericUpDown();
             this.labelTo = new System.Windows.Forms.Label();
             this.numFrom = new System.Windows.Forms.NumericUpDown();
@@ -38,25 +38,28 @@
             this.cbRandomTime = new System.Windows.Forms.CheckBox();
             this.numRepeat = new System.Windows.Forms.NumericUpDown();
             this.label2 = new System.Windows.Forms.Label();
-            this.btnReset = new System.Windows.Forms.Button();
             this.btnGetData = new System.Windows.Forms.Button();
             this.numSec = new System.Windows.Forms.NumericUpDown();
             this.labelPerSec = new System.Windows.Forms.Label();
             this.tbURL = new System.Windows.Forms.TextBox();
+            this.btnRandomAll = new System.Windows.Forms.Button();
+            this.btnReset = new System.Windows.Forms.Button();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
+            this.btnStart = new System.Windows.Forms.Button();
+            this.btnStop = new System.Windows.Forms.Button();
+            this.groupBox4 = new System.Windows.Forms.GroupBox();
+            this.panel1 = new System.Windows.Forms.Panel();
+            this.lbStatus = new System.Windows.Forms.Label();
+            this.label4 = new System.Windows.Forms.Label();
+            this.lbRUNNING = new System.Windows.Forms.Label();
             this.ID = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Entry = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Question = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Answer = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.RandomAnswer = new System.Windows.Forms.DataGridViewCheckBoxColumn();
-            this.btnStart = new System.Windows.Forms.Button();
-            this.btnStop = new System.Windows.Forms.Button();
-            this.groupBox4 = new System.Windows.Forms.GroupBox();
-            this.panel1 = new System.Windows.Forms.Panel();
-            this.lbRUNNING = new System.Windows.Forms.Label();
-            this.label4 = new System.Windows.Forms.Label();
-            this.lbStatus = new System.Windows.Forms.Label();
+            this.IgnoreOther = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+            this.btnIgnoreOtherAll = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numTo)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numFrom)).BeginInit();
@@ -70,18 +73,16 @@
             // 
             // label1
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(15, 25);
+            resources.ApplyResources(this.label1, "label1");
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(32, 13);
-            this.label1.TabIndex = 0;
-            this.label1.Text = "URL:";
             // 
             // groupBox1
             // 
+            resources.ApplyResources(this.groupBox1, "groupBox1");
             this.groupBox1.Controls.Add(this.numTo);
             this.groupBox1.Controls.Add(this.labelTo);
             this.groupBox1.Controls.Add(this.numFrom);
+            this.groupBox1.Controls.Add(this.btnReset);
             this.groupBox1.Controls.Add(this.labelFrom);
             this.groupBox1.Controls.Add(this.cbRandomTime);
             this.groupBox1.Controls.Add(this.numRepeat);
@@ -91,89 +92,54 @@
             this.groupBox1.Controls.Add(this.labelPerSec);
             this.groupBox1.Controls.Add(this.tbURL);
             this.groupBox1.Controls.Add(this.label1);
-            this.groupBox1.Location = new System.Drawing.Point(12, 12);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(648, 129);
-            this.groupBox1.TabIndex = 1;
             this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "Config";
-            // 
-            // btnRandomAll
-            // 
-            this.btnRandomAll.Enabled = false;
-            this.btnRandomAll.Location = new System.Drawing.Point(133, 78);
-            this.btnRandomAll.Name = "btnRandomAll";
-            this.btnRandomAll.Size = new System.Drawing.Size(102, 32);
-            this.btnRandomAll.TabIndex = 15;
-            this.btnRandomAll.Text = "Random all";
-            this.btnRandomAll.UseVisualStyleBackColor = true;
-            this.btnRandomAll.Click += new System.EventHandler(this.btnRandomAll_Click);
             // 
             // numTo
             // 
-            this.numTo.Location = new System.Drawing.Point(166, 60);
+            resources.ApplyResources(this.numTo, "numTo");
             this.numTo.Maximum = new decimal(new int[] {
             3600,
             0,
             0,
             0});
             this.numTo.Name = "numTo";
-            this.numTo.Size = new System.Drawing.Size(64, 20);
-            this.numTo.TabIndex = 14;
             this.numTo.Value = new decimal(new int[] {
             1,
             0,
             0,
             0});
-            this.numTo.Visible = false;
             // 
             // labelTo
             // 
-            this.labelTo.AutoSize = true;
-            this.labelTo.Location = new System.Drawing.Point(134, 62);
+            resources.ApplyResources(this.labelTo, "labelTo");
             this.labelTo.Name = "labelTo";
-            this.labelTo.Size = new System.Drawing.Size(26, 13);
-            this.labelTo.TabIndex = 13;
-            this.labelTo.Text = "To: ";
-            this.labelTo.Visible = false;
             // 
             // numFrom
             // 
-            this.numFrom.Location = new System.Drawing.Point(57, 60);
+            resources.ApplyResources(this.numFrom, "numFrom");
             this.numFrom.Maximum = new decimal(new int[] {
             3600,
             0,
             0,
             0});
             this.numFrom.Name = "numFrom";
-            this.numFrom.Size = new System.Drawing.Size(64, 20);
-            this.numFrom.TabIndex = 12;
-            this.numFrom.Visible = false;
             // 
             // labelFrom
             // 
-            this.labelFrom.AutoSize = true;
-            this.labelFrom.Location = new System.Drawing.Point(15, 62);
+            resources.ApplyResources(this.labelFrom, "labelFrom");
             this.labelFrom.Name = "labelFrom";
-            this.labelFrom.Size = new System.Drawing.Size(36, 13);
-            this.labelFrom.TabIndex = 11;
-            this.labelFrom.Text = "From: ";
-            this.labelFrom.Visible = false;
             // 
             // cbRandomTime
             // 
-            this.cbRandomTime.AutoSize = true;
-            this.cbRandomTime.Location = new System.Drawing.Point(18, 93);
+            resources.ApplyResources(this.cbRandomTime, "cbRandomTime");
             this.cbRandomTime.Name = "cbRandomTime";
-            this.cbRandomTime.Size = new System.Drawing.Size(88, 17);
-            this.cbRandomTime.TabIndex = 10;
-            this.cbRandomTime.Text = "Random time";
             this.cbRandomTime.UseVisualStyleBackColor = true;
             this.cbRandomTime.CheckedChanged += new System.EventHandler(this.cbRandomTime_CheckedChanged);
             // 
             // numRepeat
             // 
-            this.numRepeat.Location = new System.Drawing.Point(465, 60);
+            resources.ApplyResources(this.numRepeat, "numRepeat");
             this.numRepeat.Maximum = new decimal(new int[] {
             10000,
             0,
@@ -185,8 +151,6 @@
             0,
             0});
             this.numRepeat.Name = "numRepeat";
-            this.numRepeat.Size = new System.Drawing.Size(74, 20);
-            this.numRepeat.TabIndex = 9;
             this.numRepeat.Value = new decimal(new int[] {
             1,
             0,
@@ -195,73 +159,60 @@
             // 
             // label2
             // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(381, 62);
+            resources.ApplyResources(this.label2, "label2");
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(78, 13);
-            this.label2.TabIndex = 8;
-            this.label2.Text = "Repeat (times):";
-            // 
-            // btnReset
-            // 
-            this.btnReset.Location = new System.Drawing.Point(20, 78);
-            this.btnReset.Name = "btnReset";
-            this.btnReset.Size = new System.Drawing.Size(107, 32);
-            this.btnReset.TabIndex = 7;
-            this.btnReset.Text = "Reset";
-            this.btnReset.UseVisualStyleBackColor = true;
-            this.btnReset.Click += new System.EventHandler(this.btnReset_Click);
             // 
             // btnGetData
             // 
-            this.btnGetData.Location = new System.Drawing.Point(556, 22);
+            resources.ApplyResources(this.btnGetData, "btnGetData");
             this.btnGetData.Name = "btnGetData";
-            this.btnGetData.Size = new System.Drawing.Size(75, 58);
-            this.btnGetData.TabIndex = 5;
-            this.btnGetData.Text = "Get data";
             this.btnGetData.UseVisualStyleBackColor = true;
             this.btnGetData.Click += new System.EventHandler(this.btnGetData_Click);
             // 
             // numSec
             // 
-            this.numSec.Location = new System.Drawing.Point(113, 60);
+            resources.ApplyResources(this.numSec, "numSec");
             this.numSec.Maximum = new decimal(new int[] {
             3600,
             0,
             0,
             0});
             this.numSec.Name = "numSec";
-            this.numSec.Size = new System.Drawing.Size(64, 20);
-            this.numSec.TabIndex = 1;
             // 
             // labelPerSec
             // 
-            this.labelPerSec.AutoSize = true;
-            this.labelPerSec.Location = new System.Drawing.Point(15, 62);
+            resources.ApplyResources(this.labelPerSec, "labelPerSec");
             this.labelPerSec.Name = "labelPerSec";
-            this.labelPerSec.Size = new System.Drawing.Size(92, 13);
-            this.labelPerSec.TabIndex = 0;
-            this.labelPerSec.Text = "Once per second:";
             // 
             // tbURL
             // 
-            this.tbURL.Location = new System.Drawing.Point(53, 22);
+            resources.ApplyResources(this.tbURL, "tbURL");
             this.tbURL.Name = "tbURL";
-            this.tbURL.Size = new System.Drawing.Size(486, 20);
-            this.tbURL.TabIndex = 1;
+            // 
+            // btnRandomAll
+            // 
+            resources.ApplyResources(this.btnRandomAll, "btnRandomAll");
+            this.btnRandomAll.Name = "btnRandomAll";
+            this.btnRandomAll.UseVisualStyleBackColor = true;
+            this.btnRandomAll.Click += new System.EventHandler(this.btnRandomAll_Click);
+            // 
+            // btnReset
+            // 
+            resources.ApplyResources(this.btnReset, "btnReset");
+            this.btnReset.Name = "btnReset";
+            this.btnReset.UseVisualStyleBackColor = true;
+            this.btnReset.Click += new System.EventHandler(this.btnReset_Click);
             // 
             // groupBox3
             // 
+            resources.ApplyResources(this.groupBox3, "groupBox3");
             this.groupBox3.Controls.Add(this.dataGridView1);
-            this.groupBox3.Location = new System.Drawing.Point(12, 147);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(920, 291);
-            this.groupBox3.TabIndex = 3;
             this.groupBox3.TabStop = false;
-            this.groupBox3.Text = "Data";
             // 
             // dataGridView1
             // 
+            resources.ApplyResources(this.dataGridView1, "dataGridView1");
             this.dataGridView1.AllowUserToAddRows = false;
             this.dataGridView1.AllowUserToDeleteRows = false;
             this.dataGridView1.AllowUserToResizeRows = false;
@@ -272,135 +223,118 @@
             this.Entry,
             this.Question,
             this.Answer,
-            this.RandomAnswer});
-            this.dataGridView1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dataGridView1.Location = new System.Drawing.Point(3, 16);
+            this.RandomAnswer,
+            this.IgnoreOther});
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dataGridView1.Size = new System.Drawing.Size(914, 272);
-            this.dataGridView1.TabIndex = 0;
             this.dataGridView1.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellClick);
-            // 
-            // ID
-            // 
-            this.ID.HeaderText = "ID";
-            this.ID.Name = "ID";
-            this.ID.ReadOnly = true;
-            // 
-            // Entry
-            // 
-            this.Entry.HeaderText = "Entry";
-            this.Entry.Name = "Entry";
-            this.Entry.ReadOnly = true;
-            // 
-            // Question
-            // 
-            this.Question.HeaderText = "Question";
-            this.Question.Name = "Question";
-            this.Question.ReadOnly = true;
-            // 
-            // Answer
-            // 
-            this.Answer.HeaderText = "Answer";
-            this.Answer.Name = "Answer";
-            this.Answer.ReadOnly = true;
-            // 
-            // RandomAnswer
-            // 
-            this.RandomAnswer.HeaderText = "RandomAnswer";
-            this.RandomAnswer.Name = "RandomAnswer";
             // 
             // btnStart
             // 
-            this.btnStart.Enabled = false;
+            resources.ApplyResources(this.btnStart, "btnStart");
             this.btnStart.ForeColor = System.Drawing.Color.Green;
-            this.btnStart.Location = new System.Drawing.Point(20, 29);
             this.btnStart.Name = "btnStart";
-            this.btnStart.Size = new System.Drawing.Size(107, 32);
-            this.btnStart.TabIndex = 4;
-            this.btnStart.Text = "Start";
             this.btnStart.UseVisualStyleBackColor = true;
             this.btnStart.Click += new System.EventHandler(this.btnStart_Click);
             // 
             // btnStop
             // 
+            resources.ApplyResources(this.btnStop, "btnStop");
             this.btnStop.ForeColor = System.Drawing.Color.Red;
-            this.btnStop.Location = new System.Drawing.Point(133, 29);
             this.btnStop.Name = "btnStop";
-            this.btnStop.Size = new System.Drawing.Size(102, 32);
-            this.btnStop.TabIndex = 5;
-            this.btnStop.Text = "Stop";
             this.btnStop.UseVisualStyleBackColor = true;
             this.btnStop.Click += new System.EventHandler(this.btnStop_Click);
             // 
             // groupBox4
             // 
+            resources.ApplyResources(this.groupBox4, "groupBox4");
+            this.groupBox4.Controls.Add(this.btnIgnoreOtherAll);
             this.groupBox4.Controls.Add(this.btnRandomAll);
             this.groupBox4.Controls.Add(this.btnStart);
             this.groupBox4.Controls.Add(this.btnStop);
-            this.groupBox4.Controls.Add(this.btnReset);
-            this.groupBox4.Location = new System.Drawing.Point(677, 12);
             this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Size = new System.Drawing.Size(252, 129);
-            this.groupBox4.TabIndex = 3;
             this.groupBox4.TabStop = false;
-            this.groupBox4.Text = "Control";
             // 
             // panel1
             // 
+            resources.ApplyResources(this.panel1, "panel1");
             this.panel1.Controls.Add(this.lbStatus);
             this.panel1.Controls.Add(this.label4);
             this.panel1.Controls.Add(this.lbRUNNING);
-            this.panel1.Location = new System.Drawing.Point(-2, 441);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(947, 33);
-            this.panel1.TabIndex = 4;
-            // 
-            // lbRUNNING
-            // 
-            this.lbRUNNING.AutoSize = true;
-            this.lbRUNNING.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbRUNNING.ForeColor = System.Drawing.Color.Red;
-            this.lbRUNNING.Location = new System.Drawing.Point(14, 7);
-            this.lbRUNNING.Name = "lbRUNNING";
-            this.lbRUNNING.Size = new System.Drawing.Size(81, 17);
-            this.lbRUNNING.TabIndex = 0;
-            this.lbRUNNING.Text = "STOPPED";
-            // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(862, 7);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(72, 13);
-            this.label4.TabIndex = 1;
-            this.label4.Text = "Version: 1.0.0";
             // 
             // lbStatus
             // 
-            this.lbStatus.AutoSize = true;
-            this.lbStatus.Location = new System.Drawing.Point(110, 9);
+            resources.ApplyResources(this.lbStatus, "lbStatus");
             this.lbStatus.Name = "lbStatus";
-            this.lbStatus.Size = new System.Drawing.Size(337, 13);
-            this.lbStatus.TabIndex = 2;
-            this.lbStatus.Text = "|     Total: 0     |     Success: 0     |     Failed:  0     |     Waiting: 0 sec" +
-    "     |";
+            // 
+            // label4
+            // 
+            resources.ApplyResources(this.label4, "label4");
+            this.label4.Name = "label4";
+            // 
+            // lbRUNNING
+            // 
+            resources.ApplyResources(this.lbRUNNING, "lbRUNNING");
+            this.lbRUNNING.ForeColor = System.Drawing.Color.Red;
+            this.lbRUNNING.Name = "lbRUNNING";
+            // 
+            // ID
+            // 
+            resources.ApplyResources(this.ID, "ID");
+            this.ID.Name = "ID";
+            this.ID.ReadOnly = true;
+            // 
+            // Entry
+            // 
+            resources.ApplyResources(this.Entry, "Entry");
+            this.Entry.Name = "Entry";
+            this.Entry.ReadOnly = true;
+            // 
+            // Question
+            // 
+            resources.ApplyResources(this.Question, "Question");
+            this.Question.Name = "Question";
+            this.Question.ReadOnly = true;
+            // 
+            // Answer
+            // 
+            resources.ApplyResources(this.Answer, "Answer");
+            this.Answer.Name = "Answer";
+            this.Answer.ReadOnly = true;
+            // 
+            // RandomAnswer
+            // 
+            resources.ApplyResources(this.RandomAnswer, "RandomAnswer");
+            this.RandomAnswer.Name = "RandomAnswer";
+            // 
+            // IgnoreOther
+            // 
+            resources.ApplyResources(this.IgnoreOther, "IgnoreOther");
+            this.IgnoreOther.Name = "IgnoreOther";
+            this.IgnoreOther.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.IgnoreOther.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
+            // 
+            // btnIgnoreOtherAll
+            // 
+            resources.ApplyResources(this.btnIgnoreOtherAll, "btnIgnoreOtherAll");
+            this.btnIgnoreOtherAll.Name = "btnIgnoreOtherAll";
+            this.btnIgnoreOtherAll.UseVisualStyleBackColor = true;
+            this.btnIgnoreOtherAll.Click += new System.EventHandler(this.btnIgnoreOtherAll_Click);
             // 
             // Main
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            resources.ApplyResources(this, "$this");
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(944, 473);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.groupBox4);
             this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.groupBox1);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Fixed3D;
             this.MaximizeBox = false;
-            this.MinimumSize = new System.Drawing.Size(960, 489);
             this.Name = "Main";
             this.ShowIcon = false;
-            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "AFGForm | KhanhNguyen9872";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Main_FormClosing);
             this.Load += new System.EventHandler(this.Main_Load);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
@@ -438,16 +372,18 @@
         private System.Windows.Forms.NumericUpDown numFrom;
         private System.Windows.Forms.Label labelFrom;
         private System.Windows.Forms.CheckBox cbRandomTime;
-        private System.Windows.Forms.DataGridViewTextBoxColumn ID;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Entry;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Question;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Answer;
-        private System.Windows.Forms.DataGridViewCheckBoxColumn RandomAnswer;
         private System.Windows.Forms.Button btnRandomAll;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label lbRUNNING;
         private System.Windows.Forms.Label lbStatus;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ID;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Entry;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Question;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Answer;
+        private System.Windows.Forms.DataGridViewCheckBoxColumn RandomAnswer;
+        private System.Windows.Forms.DataGridViewCheckBoxColumn IgnoreOther;
+        private System.Windows.Forms.Button btnIgnoreOtherAll;
     }
 }
 
