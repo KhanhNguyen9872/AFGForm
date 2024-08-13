@@ -61,3 +61,4 @@ C:\Users\KhanhNguyen9872\Documents\GitHub\AFGForm\AFGForm\obj\Debug\AFGForm.Load
 C:\Users\KhanhNguyen9872\Documents\GitHub\AFGForm\AFGForm\bin\Debug\en-US\AFGForm.resources.dll
 C:\Users\KhanhNguyen9872\Documents\GitHub\AFGForm\AFGForm\obj\Debug\AFGForm.Main.en-US.resources
 C:\Users\KhanhNguyen9872\Documents\GitHub\AFGForm\AFGForm\obj\Debug\en-US\AFGForm.resources.dll
+C:\Users\KhanhNguyen9872\Documents\GitHub\AFGForm\AFGForm\obj\Debug\AFGForm.QuestionForm.en-US.resources

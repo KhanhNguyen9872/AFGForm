@@ -13,8 +13,9 @@ namespace AFGForm
         private string question;
         private string currentAnswer;
         private bool randomAnswer;
+        private bool ignoreOther;
 
-        public QuestionForm(int id, long entry, string question, string currentAnswer, Dictionary<long, Dictionary<string, List<string>>> data, bool randomAnswer)
+        public QuestionForm(int id, long entry, string question, string currentAnswer, Dictionary<long, Dictionary<string, List<string>>> data, bool randomAnswer, bool ignoreOther)
         {
             InitializeComponent();
             this.id = id;
@@ -23,6 +24,7 @@ namespace AFGForm
             this.currentAnswer = currentAnswer;
             this.data = data;
             this.randomAnswer = randomAnswer;
+            this.ignoreOther = ignoreOther;
         }
 
         private void QuestionForm_Load(object sender, EventArgs e)
@@ -32,6 +34,7 @@ namespace AFGForm
             tbEntry.Text = this.entry.ToString();
             tbQuestion.Text = this.question;
             cbRandom.Checked = this.randomAnswer;
+            cbIgnore.Checked = this.ignoreOther;
 
             cbAnswer.Items.Clear();
 
@@ -103,14 +106,22 @@ namespace AFGForm
             return cbRandom.Checked;
         }
 
+        public bool getCbIgnore()
+        {
+            return cbIgnore.Checked;
+        }
+
         private void cbRandom_CheckedChanged(object sender, EventArgs e)
         {
             if (cbRandom.Checked)
             {
                 cbAnswer.Enabled = false;
+                cbIgnore.Enabled = true;
             } else
             {
                 cbAnswer.Enabled = true;
+                cbIgnore.Enabled = false;
+                cbIgnore.Checked = false;
             }
         }
 

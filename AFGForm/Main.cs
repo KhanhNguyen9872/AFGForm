@@ -46,8 +46,18 @@ namespace AFGForm
         {
             int index = dataGridView1.CurrentRow.Index;
 
+            bool randomAnswer = Convert.ToBoolean(dataGridView1.Rows[index].Cells[4].Value.ToString());
+            bool ignoreOther = Convert.ToBoolean(dataGridView1.Rows[index].Cells[5].Value.ToString());
+
+            if (!randomAnswer)
+            {
+                dataGridView1.Rows[index].Cells[5].Value = false;
+                ignoreOther = false;
+            }
+
             if ((dataGridView1.CurrentCell.ColumnIndex == 4) || (dataGridView1.CurrentCell.ColumnIndex == 5))
             {
+                
                 return;
             }
 
@@ -63,10 +73,8 @@ namespace AFGForm
             {
                 currentAnswer = curAnswer.ToString();
             }
-            
-            bool randomAnswer = Convert.ToBoolean(dataGridView1.Rows[index].Cells[4].Value.ToString());
-            
-            QuestionForm fm = new QuestionForm(id, entry, question, currentAnswer, this.dataURL, randomAnswer);
+
+            QuestionForm fm = new QuestionForm(id, entry, question, currentAnswer, this.dataURL, randomAnswer, ignoreOther);
             fm.ShowDialog();
 
             if (fm.isSuccess)
@@ -76,6 +84,7 @@ namespace AFGForm
                 dataGridView1.Rows[index].Cells[2].Value = fm.getQuestion();
                 dataGridView1.Rows[index].Cells[3].Value = fm.getCurrentAnswer();
                 dataGridView1.Rows[index].Cells[4].Value = fm.getRandomAnswer();
+                dataGridView1.Rows[index].Cells[5].Value = fm.getCbIgnore();
             }
         }
 

@@ -40,6 +40,7 @@
             this.cbAnswer = new System.Windows.Forms.ComboBox();
             this.label4 = new System.Windows.Forms.Label();
             this.cbRandom = new System.Windows.Forms.CheckBox();
+            this.cbIgnore = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // button1
@@ -109,11 +110,18 @@
             this.cbRandom.UseVisualStyleBackColor = true;
             this.cbRandom.CheckedChanged += new System.EventHandler(this.cbRandom_CheckedChanged);
             // 
+            // cbIgnore
+            // 
+            resources.ApplyResources(this.cbIgnore, "cbIgnore");
+            this.cbIgnore.Name = "cbIgnore";
+            this.cbIgnore.UseVisualStyleBackColor = true;
+            // 
             // QuestionForm
             // 
             resources.ApplyResources(this, "$this");
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ControlBox = false;
+            this.Controls.Add(this.cbIgnore);
             this.Controls.Add(this.cbRandom);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.tbQuestion);
@@ -150,5 +158,6 @@
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.ComboBox cbAnswer;
         private System.Windows.Forms.CheckBox cbRandom;
+        private System.Windows.Forms.CheckBox cbIgnore;
     }
 }
