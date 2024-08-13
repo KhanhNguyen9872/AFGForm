@@ -7,6 +7,7 @@ using System.Net.Http;
 using System.Text.RegularExpressions;
 using System.Text.Json;
 using System.Threading;
+using System.Security.Principal;
 
 namespace AFGForm
 {
@@ -17,6 +18,7 @@ namespace AFGForm
         private Dictionary<long, Dictionary<string, List<string>>> dataURL;
         private int success = 0, fail = 0;
         private Thread thread = null;
+        private bool autoEmail = false;
 
         public Main()
         {
@@ -87,6 +89,7 @@ namespace AFGForm
             btnStart.Enabled = false;
             btnStop.Enabled = false;
             tbURL.ReadOnly = false;
+            this.autoEmail = false;
             this.reloadResult();
         }
 
@@ -156,6 +159,13 @@ namespace AFGForm
                     this.loadDataGrid();
                     if (dataGridView1.Rows.Count > 0)
                     {
+                        if (response.Contains("<input type=\"email\" class=\""))
+                        {
+                            this.autoEmail = true;
+                        } else
+                        {
+                            this.autoEmail = false;
+                        }
                         btnStart.Enabled = true;
                         btnRandomAll.Enabled = true;
                         btnIgnoreOtherAll.Enabled = true;
@@ -363,7 +373,17 @@ namespace AFGForm
 
         public string randomString(int length)
         {
-            const string chars = " qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM";
+            return this.randomString(length, false);
+        }
+
+        public string randomString(int length, bool ignoreSpace)
+        {
+            string chars = "qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM";
+            if (!ignoreSpace)
+            {
+                chars = chars + " ";
+            }
+            
             return new string(Enumerable.Repeat(chars, length)
                 .Select(s => s[random.Next(s.Length)]).ToArray());
         }
@@ -375,7 +395,8 @@ namespace AFGForm
             this.success = 0;
             this.fail = 0;
             this.reloadResult();
-
+            bool ignoreBadRequest = false;
+            
             string url = tbURL.Text.Replace("viewform", "formResponse");
 
             for (int i = 0; i < this.numRepeat.Value; i++)
@@ -462,6 +483,12 @@ namespace AFGForm
                     {
                         values.Add(new KeyValuePair<string, string>("entry." + id.ToString(), answer));
                     }
+                    values.Add(new KeyValuePair<string, string>("entry." + id.ToString() + "_sentinel", ""));
+                }
+
+                if (this.autoEmail)
+                {
+                    values.Add(new KeyValuePair<string, string>("emailAddress", this.randomString(16, true) + "@gmail.com"));
                 }
 
                 var content = new FormUrlEncodedContent(values);
@@ -474,6 +501,37 @@ namespace AFGForm
                 else
                 {
                     this.fail += 1;
+
+                    if ((response.StatusCode == System.Net.HttpStatusCode.BadRequest) && (!ignoreBadRequest))
+                    {
+                        var p = MessageBox.Show("Bad request at " + i.ToString() + "\nMaybe wrong info when submit\nPress Abort -> Stop process\nPress Retry -> Continue process\nPress Ignore -> Ignore all bad request popup", "BAD REQUEST", MessageBoxButtons.AbortRetryIgnore, MessageBoxIcon.Warning);
+                        if (p == DialogResult.Abort)
+                        {
+                            this.reloadResult();
+                            this.buttonWhileStopped();
+                            this.thread = null;
+                            return;
+                        }
+
+                        if (p == DialogResult.Ignore)
+                        {
+                            ignoreBadRequest = true;
+                        }
+
+                        if (p == DialogResult.Retry)
+                        {
+
+                        }
+                    }
+
+                    if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+                    {
+                        this.reloadResult();
+                        this.buttonWhileStopped();
+                        this.thread = null;
+                        MessageBox.Show("This form requires login!", "UNAUTHORIZED", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
+                    }
                 }
 
                 this.reloadResult();
