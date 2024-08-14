@@ -153,6 +153,9 @@
   <data name="cbIgnore.Text" xml:space="preserve">
     <value>Ignore other option</value>
   </data>
+  <data name="dataGridView1.Size" type="System.Drawing.Size, System.Drawing">
+    <value>562, 58</value>
+  </data>
   <data name="$this.ClientSize" type="System.Drawing.Size, System.Drawing">
     <value>668, 156</value>
   </data>

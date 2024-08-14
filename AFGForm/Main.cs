@@ -46,16 +46,17 @@ namespace AFGForm
         {
             int index = dataGridView1.CurrentRow.Index;
 
-            bool randomAnswer = Convert.ToBoolean(dataGridView1.Rows[index].Cells[4].Value.ToString());
-            bool ignoreOther = Convert.ToBoolean(dataGridView1.Rows[index].Cells[5].Value.ToString());
+            bool randomAnswer = Convert.ToBoolean(dataGridView1.Rows[index].Cells[5].Value.ToString());
+            bool ignoreOther = Convert.ToBoolean(dataGridView1.Rows[index].Cells[6].Value.ToString());
+            bool ignoreOtherReadOnly = dataGridView1.Rows[index].Cells[6].ReadOnly;
 
             if (!randomAnswer)
             {
-                dataGridView1.Rows[index].Cells[5].Value = false;
+                dataGridView1.Rows[index].Cells[6].Value = false;
                 ignoreOther = false;
             }
 
-            if ((dataGridView1.CurrentCell.ColumnIndex == 4) || (dataGridView1.CurrentCell.ColumnIndex == 5))
+            if ((dataGridView1.CurrentCell.ColumnIndex == 5) || (dataGridView1.CurrentCell.ColumnIndex == 6))
             {
                 
                 return;
@@ -63,9 +64,11 @@ namespace AFGForm
 
             int id = Convert.ToInt32(dataGridView1.Rows[index].Cells[0].Value.ToString());
             long entry = Convert.ToInt64(dataGridView1.Rows[index].Cells[1].Value.ToString());
-            string question = dataGridView1.Rows[index].Cells[2].Value.ToString();
-            var curAnswer = dataGridView1.Rows[index].Cells[3].Value;
+            string type = dataGridView1.Rows[index].Cells[2].Value.ToString();
+            string question = dataGridView1.Rows[index].Cells[3].Value.ToString();
+            var curAnswer = dataGridView1.Rows[index].Cells[4].Value;
             string currentAnswer;
+
             if (curAnswer == null)
             {
                 currentAnswer = null;
@@ -74,17 +77,15 @@ namespace AFGForm
                 currentAnswer = curAnswer.ToString();
             }
 
-            QuestionForm fm = new QuestionForm(id, entry, question, currentAnswer, this.dataURL, randomAnswer, ignoreOther);
+            QuestionForm fm = new QuestionForm(id, entry, type, question, currentAnswer, this.dataURL, randomAnswer, ignoreOther);
+            fm.disableIgnoreOther(ignoreOtherReadOnly);
             fm.ShowDialog();
 
             if (fm.isSuccess)
             {
-                dataGridView1.Rows[index].Cells[0].Value = fm.getID();
-                dataGridView1.Rows[index].Cells[1].Value = fm.getEntry();
-                dataGridView1.Rows[index].Cells[2].Value = fm.getQuestion();
-                dataGridView1.Rows[index].Cells[3].Value = fm.getCurrentAnswer();
-                dataGridView1.Rows[index].Cells[4].Value = fm.getRandomAnswer();
-                dataGridView1.Rows[index].Cells[5].Value = fm.getCbIgnore();
+                dataGridView1.Rows[index].Cells[4].Value = fm.getCurrentAnswer();
+                dataGridView1.Rows[index].Cells[5].Value = fm.getRandomAnswer();
+                dataGridView1.Rows[index].Cells[6].Value = fm.getCbIgnore();
             }
         }
 
@@ -168,6 +169,27 @@ namespace AFGForm
                     this.loadDataGrid();
                     if (dataGridView1.Rows.Count > 0)
                     {
+                        List<string> newList;
+                        foreach(var a0 in this.dataURL)
+                        {
+                            newList = new List<string>();
+                            foreach(var a1 in a0.Value)
+                            {
+                                int count = -1;
+                                foreach(string a2 in a1.Value)
+                                {
+                                    count = count + 1;
+                                    if (count == 0)
+                                    {
+                                        continue;
+                                    }
+
+                                    newList.Add(a2);
+                                }
+                                this.dataURL[a0.Key][a1.Key] = newList;
+                                break;
+                            }
+                        }
                         if (response.Contains("<input type=\"email\" class=\""))
                         {
                             this.autoEmail = true;
@@ -210,13 +232,39 @@ namespace AFGForm
 
                 foreach (var ss in s.Value)
                 {
-                    row.Cells[2].Value = ss.Key;
-                    row.Cells[3].Value = null;
-                    foreach(string sss in ss.Value)
+                    row.Cells[2].Value = null;
+                    row.Cells[3].Value = ss.Key;
+                    row.Cells[4].Value = null;
+                    foreach (string sss in ss.Value)
                     {
-                        if (row.Cells[3].Value == null)
+                        if (row.Cells[2].Value == null)
                         {
-                            row.Cells[3].Value = sss;
+                            string tmp = sss;
+                            switch(Convert.ToInt32(sss))
+                            {
+                                case 0:
+                                    tmp = "Short answer";
+                                    break;
+                                case 1:
+                                    tmp = "Paragraph";
+                                    break;
+                                case 2:
+                                    tmp = "Single select";
+                                    break;
+                                case 3:
+                                    tmp = "Drop-down menu";
+                                    break;
+                                case 4:
+                                    tmp = "Multi select";
+                                    break;
+                            }
+                            row.Cells[2].Value = tmp;
+                            continue;
+                        }
+
+                        if (row.Cells[4].Value == null)
+                        {
+                            row.Cells[4].Value = sss;
                         }
 
                         if ((string.IsNullOrEmpty(sss)) || sss.Equals(" "))
@@ -228,12 +276,12 @@ namespace AFGForm
                     break;
                 }
 
-                row.Cells[4].Value = false;
                 row.Cells[5].Value = false;
+                row.Cells[6].Value = false;
 
                 if (!isEnableIgnore)
                 {
-                    row.Cells[5].ReadOnly = true;
+                    row.Cells[6].ReadOnly = true;
                 }
                 dataGridView1.Rows.Add(row);
                 i = i + 1;
@@ -277,6 +325,7 @@ namespace AFGForm
             foreach (var item in i)
             {
                 var ques = item.EnumerateArray();
+                int type = -1;
                 int c = 0;
                 long id = 0;
                 string question = "";
@@ -286,6 +335,11 @@ namespace AFGForm
                     if (c == 1)
                     {
                         question = q.GetString();
+                    }
+
+                    if (c == 3)
+                    {
+                        type = q.GetInt32();
                     }
 
                     if (c == 4)
@@ -308,6 +362,7 @@ namespace AFGForm
                                 if (countAnswer == 1)
                                 {
                                     answer = new List<string>();
+                                    answer.Add(type.ToString());
                                     if (an.ValueKind == JsonValueKind.Null)
                                     {
                                         break;
@@ -424,37 +479,76 @@ namespace AFGForm
                         continue;
                     }
 
-                    long id = Convert.ToInt64(row.Cells[1].Value.ToString());
-                    string question = row.Cells[2].Value.ToString();
-                    var data = row.Cells[3].Value;
-                    bool isRandom = Convert.ToBoolean(row.Cells[4].Value);
-                    bool isIgnore = Convert.ToBoolean(row.Cells[5].Value);
-                    bool isIgnoreReadOnly = row.Cells[5].ReadOnly;
+                    long entry = Convert.ToInt64(row.Cells[1].Value.ToString());
+                    string type = row.Cells[2].Value.ToString();
+                    string question = row.Cells[3].Value.ToString();
+                    var data = row.Cells[4].Value;
+                    bool isRandom = Convert.ToBoolean(row.Cells[5].Value);
+                    bool isIgnore = Convert.ToBoolean(row.Cells[6].Value);
+                    bool isIgnoreReadOnly = row.Cells[6].ReadOnly;
+
+                    if (isIgnoreReadOnly)
+                    {
+                        isIgnore = false;
+                    }
 
                     string answer = "";
-                    bool isRandomStr = false;
 
-                    var q = this.dataURL[id][question];
+                    var q = this.dataURL[entry][question];
+                    int repeat = 0;
                     if (isRandom)
                     {
                         if (q.Count > 0)
                         {
+                            int qCount = q.Count;
+
                             if (isIgnore)
                             {
+                                qCount = qCount - 1;
+                            }
+
+                            if (type.Equals("Multi select"))
+                            {
+                                repeat = random.Next(1, qCount);
+                            }
+                            else
+                            {
+                                repeat = 1;
+                            }
+
+                            answer = "";
+                            for (int j = 0; j < repeat; j++)
+                            {
+                                if (j > 0)
+                                {
+                                    answer = answer + (char)0;
+                                }
+
+                                int rand;
                                 do
                                 {
-                                    int rand = random.Next(0, q.Count);
-                                    answer = q[rand];
-                                } while (string.IsNullOrEmpty(answer));
-                            } else
-                            {
-                                int rand = random.Next(0, q.Count);
-                                answer = q[rand];
+                                    rand = random.Next(0, qCount);
+                                    if (string.IsNullOrEmpty(q[rand]))
+                                    {
+                                        qCount = qCount - 1;
+                                        break;
+                                    }
+                                } while (inStr(answer, q[rand]));
 
-                                if (string.IsNullOrEmpty(answer))
+                                if (string.IsNullOrEmpty(q[rand])) {
+                                    if (!isIgnore)
+                                    {
+                                        if (type.Equals("Multi select"))
+                                        {
+                                            answer = answer + this.randomString(random.Next(3, 30));
+                                        } else
+                                        {
+                                            answer = this.randomString(random.Next(5, 30));
+                                        }
+                                    }
+                                } else
                                 {
-                                    answer = this.randomString(random.Next(5, 30));
-                                    isRandomStr = true;
+                                    answer = answer + q[rand];
                                 }
                             }
                         }
@@ -475,24 +569,30 @@ namespace AFGForm
                         }
                     }
 
-                    if (!isRandomStr)
+                    if (this.dataURL[entry][question].Count == 0)
                     {
-                        if (notIn(q, answer))
-                        {
-                            isRandomStr = true;
-                        }
-                    }
-
-                    if ((isRandomStr) && (!isIgnoreReadOnly))
-                    {
-                        values.Add(new KeyValuePair<string, string>("entry." + id.ToString() + ".other_option_response", answer));
-                        values.Add(new KeyValuePair<string, string>("entry." + id.ToString(), "__other_option__"));
+                        values.Add(new KeyValuePair<string, string>("entry." + entry.ToString(), answer));
                     }
                     else
                     {
-                        values.Add(new KeyValuePair<string, string>("entry." + id.ToString(), answer));
+                        if ((type.Equals("Multi select")) || (type.Equals("Single select"))) {
+                            foreach (string a in answer.Split((char)0))
+                            {
+                                if (!notIn(this.dataURL[entry][question], a))
+                                {
+                                    values.Add(new KeyValuePair<string, string>("entry." + entry.ToString(), a));
+                                } else
+                                {
+                                    values.Add(new KeyValuePair<string, string>("entry." + entry.ToString() + ".other_option_response", a));
+                                    values.Add(new KeyValuePair<string, string>("entry." + entry.ToString(), "__other_option__"));
+                                }
+                            }
+                        } else
+                        {
+                            values.Add(new KeyValuePair<string, string>("entry." + entry.ToString(), answer));
+                        }
                     }
-                    values.Add(new KeyValuePair<string, string>("entry." + id.ToString() + "_sentinel", ""));
+                    values.Add(new KeyValuePair<string, string>("entry." + entry.ToString() + "_sentinel", ""));
                 }
 
                 if (this.autoEmail)
@@ -561,6 +661,29 @@ namespace AFGForm
             MessageBox.Show("Completed all jobs!", "Done", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
+        private bool inStr(string str, string t)
+        {
+            if (string.IsNullOrEmpty(str))
+            {
+                return false;
+            }
+            bool check = false;
+            foreach (string s in str.Split((char)0))
+            {
+                if (string.IsNullOrEmpty(s))
+                {
+                    continue;
+                }
+                if (t.Equals(s))
+                {
+                    check = true;
+                    break;
+                }
+            }
+
+            return check;
+        }
+
         private bool notIn(List<string> q, string answer)
         {
             bool check = true;
@@ -589,9 +712,9 @@ namespace AFGForm
         {
             foreach(DataGridViewRow row in dataGridView1.Rows)
             {
-                if ((row.Cells[3].Value == null) || (string.IsNullOrEmpty(row.Cells[3].Value.ToString())))
+                if ((row.Cells[4].Value == null) || (string.IsNullOrEmpty(row.Cells[4].Value.ToString())))
                 {
-                    if (!Convert.ToBoolean(row.Cells[4].Value.ToString()))
+                    if (!Convert.ToBoolean(row.Cells[5].Value.ToString()))
                     {
                         if (MessageBox.Show("Found empty answer from [ID: " + row.Cells[0].Value.ToString() + "]\nDo you want to continue?", "WARNING", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
                         {
@@ -648,7 +771,7 @@ namespace AFGForm
             {
                 foreach (DataGridViewRow row in dataGridView1.Rows)
                 {
-                    row.Cells[4].Value = true;
+                    row.Cells[5].Value = true;
                 }
             }
         }
@@ -673,9 +796,17 @@ namespace AFGForm
                 return;
             }
 
-            this.thread.Abort();
-            this.thread = null;
-            this.buttonWhileStopped();
+            if (MessageBox.Show("Do you want to stop?", "STOP", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
+            {
+                try {
+                    this.thread.Abort();
+                } catch (Exception ex)
+                {
+
+                }
+                this.thread = null;
+                this.buttonWhileStopped();
+            }
         }
 
         private void Main_FormClosing(object sender, FormClosingEventArgs e)
@@ -693,11 +824,11 @@ namespace AFGForm
             {
                 foreach (DataGridViewRow row in dataGridView1.Rows)
                 {
-                    if (row.Cells[5].ReadOnly)
+                    if (row.Cells[6].ReadOnly)
                     {
                         continue;
                     }
-                    row.Cells[5].Value = true;
+                    row.Cells[6].Value = true;
                 }
             }
         }
