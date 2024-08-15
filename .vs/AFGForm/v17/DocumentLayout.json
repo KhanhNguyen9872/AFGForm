@@ -7,19 +7,7 @@
       "RelativeMoniker": "D:0:0:{E2C0D3F1-0EE6-47A7-A897-B6E7C7421A00}|AFGForm\\AFGForm.csproj|solutionrelative:afgform\\questionform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{E2C0D3F1-0EE6-47A7-A897-B6E7C7421A00}|AFGForm\\AFGForm.csproj|c:\\users\\khanhnguyen9872\\documents\\github\\afgform\\afgform\\questionform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
-      "RelativeMoniker": "D:0:0:{E2C0D3F1-0EE6-47A7-A897-B6E7C7421A00}|AFGForm\\AFGForm.csproj|solutionrelative:afgform\\questionform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{E2C0D3F1-0EE6-47A7-A897-B6E7C7421A00}|AFGForm\\AFGForm.csproj|C:\\Users\\KhanhNguyen9872\\Documents\\GitHub\\AFGForm\\afgform\\questionform.designer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{E2C0D3F1-0EE6-47A7-A897-B6E7C7421A00}|AFGForm\\AFGForm.csproj|solutionrelative:afgform\\questionform.designer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{E2C0D3F1-0EE6-47A7-A897-B6E7C7421A00}|AFGForm\\AFGForm.csproj|c:\\users\\khanhnguyen9872\\documents\\github\\afgform\\afgform\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{E2C0D3F1-0EE6-47A7-A897-B6E7C7421A00}|AFGForm\\AFGForm.csproj|solutionrelative:afgform\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{E2C0D3F1-0EE6-47A7-A897-B6E7C7421A00}|AFGForm\\AFGForm.csproj|c:\\users\\khanhnguyen9872\\documents\\github\\afgform\\afgform\\main.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{E2C0D3F1-0EE6-47A7-A897-B6E7C7421A00}|AFGForm\\AFGForm.csproj|C:\\Users\\KhanhNguyen9872\\Documents\\GitHub\\AFGForm\\afgform\\main.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{E2C0D3F1-0EE6-47A7-A897-B6E7C7421A00}|AFGForm\\AFGForm.csproj|solutionrelative:afgform\\main.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
@@ -27,8 +15,16 @@
       "RelativeMoniker": "D:0:0:{E2C0D3F1-0EE6-47A7-A897-B6E7C7421A00}|AFGForm\\AFGForm.csproj|solutionrelative:afgform\\main.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{E2C0D3F1-0EE6-47A7-A897-B6E7C7421A00}|AFGForm\\AFGForm.csproj|C:\\Users\\KhanhNguyen9872\\Documents\\GitHub\\AFGForm\\afgform\\loadingform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
-      "RelativeMoniker": "D:0:0:{E2C0D3F1-0EE6-47A7-A897-B6E7C7421A00}|AFGForm\\AFGForm.csproj|solutionrelative:afgform\\loadingform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
+      "AbsoluteMoniker": "D:0:0:{E2C0D3F1-0EE6-47A7-A897-B6E7C7421A00}|AFGForm\\AFGForm.csproj|c:\\users\\khanhnguyen9872\\documents\\github\\afgform\\afgform\\questionform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
+      "RelativeMoniker": "D:0:0:{E2C0D3F1-0EE6-47A7-A897-B6E7C7421A00}|AFGForm\\AFGForm.csproj|solutionrelative:afgform\\questionform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E2C0D3F1-0EE6-47A7-A897-B6E7C7421A00}|AFGForm\\AFGForm.csproj|C:\\Users\\KhanhNguyen9872\\Documents\\GitHub\\AFGForm\\afgform\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E2C0D3F1-0EE6-47A7-A897-B6E7C7421A00}|AFGForm\\AFGForm.csproj|solutionrelative:afgform\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E2C0D3F1-0EE6-47A7-A897-B6E7C7421A00}|AFGForm\\AFGForm.csproj|C:\\Users\\KhanhNguyen9872\\Documents\\GitHub\\AFGForm\\afgform\\questionform.designer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E2C0D3F1-0EE6-47A7-A897-B6E7C7421A00}|AFGForm\\AFGForm.csproj|solutionrelative:afgform\\questionform.designer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{E2C0D3F1-0EE6-47A7-A897-B6E7C7421A00}|AFGForm\\AFGForm.csproj|C:\\Users\\KhanhNguyen9872\\Documents\\GitHub\\AFGForm\\afgform\\main.designer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -42,33 +38,21 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 2,
+          "SelectedChildIndex": 1,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 1,
               "Title": "Main.cs",
               "DocumentMoniker": "C:\\Users\\KhanhNguyen9872\\Documents\\GitHub\\AFGForm\\AFGForm\\Main.cs",
               "RelativeDocumentMoniker": "AFGForm\\Main.cs",
               "ToolTip": "C:\\Users\\KhanhNguyen9872\\Documents\\GitHub\\AFGForm\\AFGForm\\Main.cs",
               "RelativeToolTip": "AFGForm\\Main.cs",
-              "ViewState": "AQIAAN0AAAAAAAAAAADwv+QAAAAQAAAA",
+              "ViewState": "AQIAACEBAAAAAAAAAAAAwC4BAAAxAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-08-14T16:39:17.757Z",
               "IsPinned": true,
               "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "QuestionForm.cs [Design]",
-              "DocumentMoniker": "C:\\Users\\KhanhNguyen9872\\Documents\\GitHub\\AFGForm\\AFGForm\\QuestionForm.cs",
-              "RelativeDocumentMoniker": "AFGForm\\QuestionForm.cs",
-              "ToolTip": "C:\\Users\\KhanhNguyen9872\\Documents\\GitHub\\AFGForm\\AFGForm\\QuestionForm.cs [Design]",
-              "RelativeToolTip": "AFGForm\\QuestionForm.cs [Design]",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-08-14T17:14:53.1Z",
-              "EditorCaption": " [Design]"
             },
             {
               "$type": "Document",
@@ -78,7 +62,7 @@
               "RelativeDocumentMoniker": "AFGForm\\QuestionForm.cs",
               "ToolTip": "C:\\Users\\KhanhNguyen9872\\Documents\\GitHub\\AFGForm\\AFGForm\\QuestionForm.cs",
               "RelativeToolTip": "AFGForm\\QuestionForm.cs",
-              "ViewState": "AQIAAF8AAAAAAAAAAAAAAGUAAAAlAAAA",
+              "ViewState": "AQIAAEIBAAAAAAAAAAAIwEoBAAAXAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-08-14T16:44:50.522Z",
               "EditorCaption": ""
@@ -86,6 +70,18 @@
             {
               "$type": "Document",
               "DocumentIndex": 3,
+              "Title": "QuestionForm.cs [Design]",
+              "DocumentMoniker": "C:\\Users\\KhanhNguyen9872\\Documents\\GitHub\\AFGForm\\AFGForm\\QuestionForm.cs",
+              "RelativeDocumentMoniker": "AFGForm\\QuestionForm.cs",
+              "ToolTip": "C:\\Users\\KhanhNguyen9872\\Documents\\GitHub\\AFGForm\\AFGForm\\QuestionForm.cs [Design]",
+              "RelativeToolTip": "AFGForm\\QuestionForm.cs [Design]",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-08-15T05:12:40.355Z",
+              "EditorCaption": " [Design]"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
               "Title": "Program.cs",
               "DocumentMoniker": "C:\\Users\\KhanhNguyen9872\\Documents\\GitHub\\AFGForm\\AFGForm\\Program.cs",
               "RelativeDocumentMoniker": "AFGForm\\Program.cs",
@@ -98,32 +94,20 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
-              "Title": "LoadingForm.cs [Design]",
-              "DocumentMoniker": "C:\\Users\\KhanhNguyen9872\\Documents\\GitHub\\AFGForm\\AFGForm\\LoadingForm.cs",
-              "RelativeDocumentMoniker": "AFGForm\\LoadingForm.cs",
-              "ToolTip": "C:\\Users\\KhanhNguyen9872\\Documents\\GitHub\\AFGForm\\AFGForm\\LoadingForm.cs [Design]",
-              "RelativeToolTip": "AFGForm\\LoadingForm.cs [Design]",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-08-13T06:21:09.741Z",
-              "EditorCaption": " [Design]"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 5,
               "Title": "QuestionForm.Designer.cs",
               "DocumentMoniker": "C:\\Users\\KhanhNguyen9872\\Documents\\GitHub\\AFGForm\\AFGForm\\QuestionForm.Designer.cs",
               "RelativeDocumentMoniker": "AFGForm\\QuestionForm.Designer.cs",
               "ToolTip": "C:\\Users\\KhanhNguyen9872\\Documents\\GitHub\\AFGForm\\AFGForm\\QuestionForm.Designer.cs",
               "RelativeToolTip": "AFGForm\\QuestionForm.Designer.cs",
-              "ViewState": "AQIAADIAAAAAAAAAAAAlwEEAAAAAAAAA",
+              "ViewState": "AQIAAJQAAAAAAAAAAAAAwJ8AAAAPAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-08-13T02:22:44.917Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 2,
               "Title": "Main.cs [Design]",
               "DocumentMoniker": "C:\\Users\\KhanhNguyen9872\\Documents\\GitHub\\AFGForm\\AFGForm\\Main.cs",
               "RelativeDocumentMoniker": "AFGForm\\Main.cs",
@@ -135,7 +119,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 7,
+              "DocumentIndex": 6,
               "Title": "Main.Designer.cs",
               "DocumentMoniker": "C:\\Users\\KhanhNguyen9872\\Documents\\GitHub\\AFGForm\\AFGForm\\Main.Designer.cs",
               "RelativeDocumentMoniker": "AFGForm\\Main.Designer.cs",

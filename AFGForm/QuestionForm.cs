@@ -8,6 +8,7 @@ namespace AFGForm
     {
         public bool isSuccess = false;
         private Dictionary<long, Dictionary<string, List<string>>> data;
+        private List<string> removedAnswer = new List<string>();
         private int id;
         private long entry;
         private string type;
@@ -46,42 +47,10 @@ namespace AFGForm
             }
         }
 
-        private void QuestionForm_Load(object sender, EventArgs e)
+        private void loadData()
         {
-            this.Text = "ID: " + this.id.ToString() + "  |  Entry: " + this.entry.ToString(); 
-            tbID.Text = this.id.ToString();
-            tbEntry.Text = this.entry.ToString();
-            tbQuestion.Text = this.question;
-            cbRandom.Checked = this.randomAnswer;
-            cbIgnore.Checked = this.ignoreOther;
-
             if (type.Equals("Multi select"))
             {
-                this.Height = this.Height + 90;
-                System.Drawing.Point p;
-
-                p = button1.Location;
-                p.Y = p.Y + 120;
-                button1.Location = p;
-
-                p = button2.Location;
-                p.Y = p.Y + 120;
-                button2.Location = p;
-
-                System.Drawing.Size s;
-                s = dataGridView1.Size;
-                s.Height = s.Height + 110;
-                dataGridView1.Size = s;
-
-                s = tbOtherOption.Size;
-                s.Height = s.Height + 110;
-                tbOtherOption.Size = s;
-
-                lbOtherOption.Visible = true;
-                tbOtherOption.Visible = true;
-                cbAnswer.Visible = false;
-                dataGridView1.Visible = true;
-
                 dataGridView1.Rows.Clear();
 
                 DataGridViewRow row;
@@ -119,7 +88,7 @@ namespace AFGForm
                     }
 
                     row.Cells[0].Value = ss;
-                    foreach(string c in this.currentAnswer.Split((char)0))
+                    foreach (string c in this.currentAnswer.Split((char)0))
                     {
                         if (ss.Equals(c))
                         {
@@ -131,8 +100,6 @@ namespace AFGForm
                 }
             } else
             {
-                this.Height = this.Height - 30;
-
                 cbAnswer.Items.Clear();
 
                 foreach (string s in this.data[this.entry][this.question])
@@ -168,6 +135,49 @@ namespace AFGForm
                     cbAnswer.Text = this.currentAnswer;
                 }
             }
+        } 
+
+        private void QuestionForm_Load(object sender, EventArgs e)
+        {
+            this.Text = "ID: " + this.id.ToString() + "  |  Entry: " + this.entry.ToString(); 
+            tbID.Text = this.id.ToString();
+            tbEntry.Text = this.entry.ToString();
+            tbInputType.Text = this.type;
+            tbQuestion.Text = this.question;
+            cbRandom.Checked = this.randomAnswer;
+            cbIgnore.Checked = this.ignoreOther;
+
+            if (type.Equals("Multi select"))
+            {
+                this.Height = this.Height + 90;
+                System.Drawing.Point p;
+
+                p = button1.Location;
+                p.Y = p.Y + 120;
+                button1.Location = p;
+
+                p = button2.Location;
+                p.Y = p.Y + 120;
+                button2.Location = p;
+
+                System.Drawing.Size s;
+                s = dataGridView1.Size;
+                s.Height = s.Height + 110;
+                dataGridView1.Size = s;
+
+                s = tbOtherOption.Size;
+                s.Height = s.Height + 110;
+                tbOtherOption.Size = s;
+
+                lbOtherOption.Visible = true;
+                tbOtherOption.Visible = true;
+                cbAnswer.Visible = false;
+                dataGridView1.Visible = true;
+            } else
+            {
+                this.Height = this.Height - 30;
+            }
+            this.loadData();
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -177,6 +187,10 @@ namespace AFGForm
 
         private void button2_Click(object sender, EventArgs e)
         {
+            foreach(string s in this.removedAnswer)
+            {
+                this.data[this.entry][this.question].Remove(s);
+            }
             this.isSuccess = true;
             this.Close();
         }
@@ -277,6 +291,108 @@ namespace AFGForm
             {
                 this.button1_Click(sender, e);
             }
+        }
+
+        private bool deleteAnswer(string answer)
+        {
+            bool check = false;
+
+            List<DataGridViewRow> listRow = new List<DataGridViewRow>();
+
+            foreach (DataGridViewRow row in dataGridView1.Rows)
+            {
+                if (answer.Equals(row.Cells[0].Value.ToString()))
+                {
+                    check = true;
+                    continue;
+                }
+
+                listRow.Add(row);
+            }
+
+            if (check)
+            {
+                dataGridView1.Rows.Clear();
+                foreach (DataGridViewRow row in listRow)
+                {
+                    dataGridView1.Rows.Add(row);
+                }
+            }
+
+            return check;
+        }
+
+        private void dataGridView1_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            int index = dataGridView1.CurrentRow.Index;
+
+            if (dataGridView1.CurrentCell.ColumnIndex == 1)
+            {
+                return;
+            }
+
+            string answer = dataGridView1.Rows[index].Cells[0].Value.ToString();
+
+            if ((index == dataGridView1.Rows.Count - 1) && (!d_IgnoreOther) && (answer.Equals("Other option")))
+            {
+                return;
+            }
+
+            if (MessageBox.Show("Do you want to delete [" + answer + "]?", "DELETE ANSWER", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
+            {
+                if (deleteAnswer(answer))
+                {
+                    this.removedAnswer.Add(answer);
+                } else 
+                {
+                    MessageBox.Show("Failed when delete answer", "FAILED", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+        }
+
+        private void deleteToolContextComboBox_Click(object sender, EventArgs e)
+        {
+            string answer = cbAnswer.Text;
+            if (string.IsNullOrEmpty(answer))
+            {
+                return;
+            }
+
+            if (MessageBox.Show("Do you want to delete [" + answer + "]?", "DELETE ANSWER", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
+            {
+                if (cbAnswer.Items.Count > 1)
+                {
+                    cbAnswer.Items.Remove(answer);
+                    cbAnswer.SelectedIndex = 0;
+                    this.removedAnswer.Add(answer);
+                }
+                else
+                {
+                    MessageBox.Show("Cannot remove last item", "FAILED", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                }
+            }
+        }
+
+        private void addToolContextComboBox_Click(object sender, EventArgs e)
+        {
+            if (this.d_IgnoreOther)
+            {
+                MessageBox.Show("Can't add item!\n [Other option] not found in question OR inputType is not [Short answer, Paragraph]", "FAILED", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                return;
+            }
+
+            // 
+        }
+
+        private void addToolContextDataGrid_Click(object sender, EventArgs e)
+        {
+            if (this.d_IgnoreOther)
+            {
+                MessageBox.Show("Can't add item when [Other option] not found in question!", "FAILED", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                return;
+            }
+
+            //
         }
     }
 }

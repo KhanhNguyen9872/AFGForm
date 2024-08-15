@@ -91,20 +91,31 @@ namespace AFGForm
 
         private void btnReset_Click(object sender, EventArgs e)
         {
-            dataGridView1.Rows.Clear();
-            dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-            tbURL.Text = "";
-            numRepeat.Value = 1;
-            numSec.Value = 1;
-            btnStart.Enabled = false;
-            btnStop.Enabled = false;
-            tbURL.ReadOnly = false;
-            this.autoEmail = false;
-            this.reloadResult();
+            if (MessageBox.Show("All data in table will be destroyed when reset\nDo you want to reset data?", "WARNING", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
+            {
+                dataGridView1.Rows.Clear();
+                dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+                tbURL.Text = "";
+                numRepeat.Value = 1;
+                numSec.Value = 1;
+                btnStart.Enabled = false;
+                btnStop.Enabled = false;
+                tbURL.ReadOnly = false;
+                this.autoEmail = false;
+                this.reloadResult();
+            }
         }
 
         private async void btnGetData_Click(object sender, EventArgs e)
         {
+            if (dataGridView1.Rows.Count > 0)
+            {
+                if (!(MessageBox.Show("Found data in table\nAll data in table will be destroyed when get data again\nDo you want to get data again?", "WARNING", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes))
+                {
+                    return;
+                }
+            }
+
             if (string.IsNullOrEmpty(tbURL.Text))
             {
                 MessageBox.Show("URL is empty!", "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Stop);

@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
             this.Answer = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Select = new System.Windows.Forms.DataGridViewCheckBoxColumn();
@@ -36,6 +37,9 @@
             this.label4 = new System.Windows.Forms.Label();
             this.tbQuestion = new System.Windows.Forms.TextBox();
             this.cbAnswer = new System.Windows.Forms.ComboBox();
+            this.contextComboBox = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.addToolContextComboBox = new System.Windows.Forms.ToolStripMenuItem();
+            this.deleteToolContextComboBox = new System.Windows.Forms.ToolStripMenuItem();
             this.label3 = new System.Windows.Forms.Label();
             this.tbEntry = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
@@ -45,7 +49,13 @@
             this.button1 = new System.Windows.Forms.Button();
             this.tbOtherOption = new System.Windows.Forms.TextBox();
             this.lbOtherOption = new System.Windows.Forms.Label();
+            this.tbInputType = new System.Windows.Forms.TextBox();
+            this.label5 = new System.Windows.Forms.Label();
+            this.contextDataGrid = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.addToolContextDataGrid = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
+            this.contextComboBox.SuspendLayout();
+            this.contextDataGrid.SuspendLayout();
             this.SuspendLayout();
             // 
             // dataGridView1
@@ -57,12 +67,14 @@
             this.dataGridView1.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.Answer,
             this.Select});
+            this.dataGridView1.ContextMenuStrip = this.contextDataGrid;
             this.dataGridView1.Location = new System.Drawing.Point(86, 86);
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dataGridView1.Size = new System.Drawing.Size(471, 34);
             this.dataGridView1.TabIndex = 23;
             this.dataGridView1.Visible = false;
+            this.dataGridView1.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellClick);
             // 
             // Answer
             // 
@@ -82,7 +94,7 @@
             this.cbIgnore.AutoSize = true;
             this.cbIgnore.Enabled = false;
             this.cbIgnore.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.cbIgnore.Location = new System.Drawing.Point(406, 15);
+            this.cbIgnore.Location = new System.Drawing.Point(598, 15);
             this.cbIgnore.Name = "cbIgnore";
             this.cbIgnore.Size = new System.Drawing.Size(115, 17);
             this.cbIgnore.TabIndex = 22;
@@ -93,7 +105,7 @@
             // 
             this.cbRandom.AutoSize = true;
             this.cbRandom.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.cbRandom.Location = new System.Drawing.Point(288, 15);
+            this.cbRandom.Location = new System.Drawing.Point(480, 15);
             this.cbRandom.Name = "cbRandom";
             this.cbRandom.Size = new System.Drawing.Size(103, 17);
             this.cbRandom.TabIndex = 15;
@@ -121,12 +133,35 @@
             // 
             // cbAnswer
             // 
+            this.cbAnswer.ContextMenuStrip = this.contextComboBox;
             this.cbAnswer.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbAnswer.FormattingEnabled = true;
             this.cbAnswer.Location = new System.Drawing.Point(86, 85);
             this.cbAnswer.Name = "cbAnswer";
             this.cbAnswer.Size = new System.Drawing.Size(627, 21);
             this.cbAnswer.TabIndex = 11;
+            // 
+            // contextComboBox
+            // 
+            this.contextComboBox.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.addToolContextComboBox,
+            this.deleteToolContextComboBox});
+            this.contextComboBox.Name = "contextComboBox";
+            this.contextComboBox.Size = new System.Drawing.Size(108, 48);
+            // 
+            // addToolContextComboBox
+            // 
+            this.addToolContextComboBox.Name = "addToolContextComboBox";
+            this.addToolContextComboBox.Size = new System.Drawing.Size(180, 22);
+            this.addToolContextComboBox.Text = "Add";
+            this.addToolContextComboBox.Click += new System.EventHandler(this.addToolContextComboBox_Click);
+            // 
+            // deleteToolContextComboBox
+            // 
+            this.deleteToolContextComboBox.Name = "deleteToolContextComboBox";
+            this.deleteToolContextComboBox.Size = new System.Drawing.Size(107, 22);
+            this.deleteToolContextComboBox.Text = "Delete";
+            this.deleteToolContextComboBox.Click += new System.EventHandler(this.deleteToolContextComboBox_Click);
             // 
             // label3
             // 
@@ -216,12 +251,46 @@
             this.lbOtherOption.Text = "Other option: ";
             this.lbOtherOption.Visible = false;
             // 
+            // tbInputType
+            // 
+            this.tbInputType.Location = new System.Drawing.Point(345, 12);
+            this.tbInputType.Name = "tbInputType";
+            this.tbInputType.ReadOnly = true;
+            this.tbInputType.Size = new System.Drawing.Size(117, 20);
+            this.tbInputType.TabIndex = 27;
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.ImeMode = System.Windows.Forms.ImeMode.NoControl;
+            this.label5.Location = new System.Drawing.Point(281, 15);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(60, 13);
+            this.label5.TabIndex = 26;
+            this.label5.Text = "Input type: ";
+            // 
+            // contextDataGrid
+            // 
+            this.contextDataGrid.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.addToolContextDataGrid});
+            this.contextDataGrid.Name = "contextDataGrid";
+            this.contextDataGrid.Size = new System.Drawing.Size(97, 26);
+            // 
+            // addToolContextDataGrid
+            // 
+            this.addToolContextDataGrid.Name = "addToolContextDataGrid";
+            this.addToolContextDataGrid.Size = new System.Drawing.Size(180, 22);
+            this.addToolContextDataGrid.Text = "Add";
+            this.addToolContextDataGrid.Click += new System.EventHandler(this.addToolContextDataGrid_Click);
+            // 
             // QuestionForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(737, 156);
+            this.ClientSize = new System.Drawing.Size(747, 189);
             this.ControlBox = false;
+            this.Controls.Add(this.tbInputType);
+            this.Controls.Add(this.label5);
             this.Controls.Add(this.lbOtherOption);
             this.Controls.Add(this.tbOtherOption);
             this.Controls.Add(this.dataGridView1);
@@ -249,6 +318,8 @@
             this.Load += new System.EventHandler(this.QuestionForm_Load);
             this.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.QuestionForm_KeyPress);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
+            this.contextComboBox.ResumeLayout(false);
+            this.contextDataGrid.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -273,5 +344,12 @@
         private System.Windows.Forms.DataGridViewCheckBoxColumn Select;
         private System.Windows.Forms.TextBox tbOtherOption;
         private System.Windows.Forms.Label lbOtherOption;
+        private System.Windows.Forms.TextBox tbInputType;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.ContextMenuStrip contextComboBox;
+        private System.Windows.Forms.ToolStripMenuItem addToolContextComboBox;
+        private System.Windows.Forms.ToolStripMenuItem deleteToolContextComboBox;
+        private System.Windows.Forms.ContextMenuStrip contextDataGrid;
+        private System.Windows.Forms.ToolStripMenuItem addToolContextDataGrid;
     }
 }
