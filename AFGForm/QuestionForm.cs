@@ -16,7 +16,8 @@ namespace AFGForm
         private string currentAnswer;
         private bool randomAnswer;
         private bool ignoreOther;
-        private bool d_IgnoreOther = false; 
+        private bool d_IgnoreOther = false;
+        private bool isClear = false;
 
         public QuestionForm(int id, long entry, string type, string question, string currentAnswer, Dictionary<long, Dictionary<string, List<string>>> data, bool randomAnswer, bool ignoreOther)
         {
@@ -98,6 +99,11 @@ namespace AFGForm
                     }
                     dataGridView1.Rows.Add(row);
                 }
+            } else if (type.Equals("Date"))
+            {
+
+            } else if (type.Equals("Time")) {
+
             } else
             {
                 cbAnswer.Items.Clear();
@@ -152,6 +158,10 @@ namespace AFGForm
                 this.Height = this.Height + 90;
                 System.Drawing.Point p;
 
+                p = clearBtn.Location;
+                p.Y = p.Y + 120;
+                clearBtn.Location = p;
+
                 p = button1.Location;
                 p.Y = p.Y + 120;
                 button1.Location = p;
@@ -171,11 +181,46 @@ namespace AFGForm
 
                 lbOtherOption.Visible = true;
                 tbOtherOption.Visible = true;
-                cbAnswer.Visible = false;
                 dataGridView1.Visible = true;
+            } else if (type.Equals("Date"))
+            {
+                if (!string.IsNullOrEmpty(this.currentAnswer))
+                {
+                    datePicker.Value = new DateTime(
+                        Convert.ToInt32(this.currentAnswer.Split('-')[0]),
+                        Convert.ToInt32(this.currentAnswer.Split('-')[1]),
+                        Convert.ToInt32(this.currentAnswer.Split('-')[2])
+                    );
+                } else
+                {
+                    datePicker.Value = DateTime.Now;
+                }
+
+                datePicker.Visible = true;
+                this.Height = this.Height - 30;
+            } else if (type.Equals("Time"))
+            {
+                if (!string.IsNullOrEmpty(this.currentAnswer))
+                {
+                    timePicker.Value = new DateTime(
+                        1975,
+                        01,
+                        01,
+                        Convert.ToInt32(this.currentAnswer.Split(':')[0]),
+                        Convert.ToInt32(this.currentAnswer.Split(':')[1]),
+                        0
+                    );
+                } else
+                {
+                    datePicker.Value = DateTime.Now;
+                }
+
+                timePicker.Visible = true;
+                this.Height = this.Height - 30;
             } else
             {
                 this.Height = this.Height - 30;
+                cbAnswer.Visible = true;
             }
             this.loadData();
         }
@@ -190,6 +235,14 @@ namespace AFGForm
             foreach(string s in this.removedAnswer)
             {
                 this.data[this.entry][this.question].Remove(s);
+            }
+            if (this.type.Equals("Date"))
+            {
+                this.currentAnswer = datePicker.Value.ToString("yyyy-MM-dd");
+            }
+            else if (this.type.Equals("Time"))
+            {
+                this.currentAnswer = timePicker.Value.ToString("HH:mm");
             }
             this.isSuccess = true;
             this.Close();
@@ -212,6 +265,11 @@ namespace AFGForm
 
         public string getCurrentAnswer()
         {
+            if (this.isClear)
+            {
+                return "";
+            }
+
             if (this.type.Equals("Multi select"))
             {
                 string fullTxt = "";
@@ -237,7 +295,11 @@ namespace AFGForm
                 }
 
                 return fullTxt;
+            } else if (this.type.Equals("Date") || this.type.Equals("Time"))
+            {
+                return this.currentAnswer;
             }
+
             return cbAnswer.Text;
         }
 
@@ -258,6 +320,8 @@ namespace AFGForm
                 cbAnswer.Enabled = false;
                 dataGridView1.Enabled = false;
                 tbOtherOption.Enabled = false;
+                timePicker.Enabled = false;
+                datePicker.Enabled = false;
                 if (!this.d_IgnoreOther)
                 {
                     cbIgnore.Enabled = true;
@@ -267,6 +331,8 @@ namespace AFGForm
                 cbAnswer.Enabled = true;
                 dataGridView1.Enabled = true;
                 tbOtherOption.Enabled = true;
+                timePicker.Enabled = true;
+                datePicker.Enabled = true;
                 if (!this.d_IgnoreOther)
                 {
                     cbIgnore.Enabled = false;
@@ -393,6 +459,13 @@ namespace AFGForm
             }
 
             //
+        }
+
+        private void clearBtn_Click(object sender, EventArgs e)
+        {
+            this.isClear = true;
+            this.isSuccess = true;
+            this.Close();
         }
     }
 }

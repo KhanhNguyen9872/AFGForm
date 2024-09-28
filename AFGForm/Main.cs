@@ -58,7 +58,6 @@ namespace AFGForm
 
             if ((dataGridView1.CurrentCell.ColumnIndex == 5) || (dataGridView1.CurrentCell.ColumnIndex == 6))
             {
-                
                 return;
             }
 
@@ -269,10 +268,10 @@ namespace AFGForm
                                     tmp = "Multi select";
                                     break;
                                 case 9:
-                                    tmp = "Day";
+                                    tmp = "Date";
                                     break;
                                 case 10:
-                                    tmp = "Hour";
+                                    tmp = "Time";
                                     break;
                             }
                             row.Cells[2].Value = tmp;
@@ -525,7 +524,7 @@ namespace AFGForm
                     int repeat = 0;
                     if (isRandom)
                     {
-                        if (type.Equals("Day"))
+                        if (type.Equals("Date"))
                         {
                             year = random.Next(1975, 2075).ToString();
                             month = random.Next(1, 13).ToString();
@@ -544,7 +543,7 @@ namespace AFGForm
                             };
                             day = random.Next(1, maxDay + 1).ToString();
                         }
-                        else if (type.Equals("Hour"))
+                        else if (type.Equals("Time"))
                         {
                             hour = random.Next(0, 24).ToString();
                             minute = random.Next(0, 60).ToString();
@@ -623,25 +622,40 @@ namespace AFGForm
                     }
                     else
                     {
-                        if (data == null)
+                        if (type.Equals("Date"))
                         {
-                            answer = "";
+                            answer = data.ToString();
+                            year = answer.Split('-')[0];
+                            month = answer.Split('-')[1];
+                            day = answer.Split('-')[2];
+                        } else if (type.Equals("Hour"))
+                        {
+                            answer = data.ToString();
+                            hour = answer.Split(':')[0];
+                            minute = answer.Split(':')[1];
                         }
                         else
                         {
-                            answer = data.ToString();
+                            if (data == null)
+                            {
+                                answer = "";
+                            }
+                            else
+                            {
+                                answer = data.ToString();
+                            }
                         }
                     }
 
                     if (this.dataURL[entry][question].Count == 0)
                     {
-                        if (type.Equals("Day"))
+                        if (type.Equals("Date"))
                         {
                             values.Add(new KeyValuePair<string, string>("entry." + entry.ToString() + "_year", year));
                             values.Add(new KeyValuePair<string, string>("entry." + entry.ToString() + "_month", month));
                             values.Add(new KeyValuePair<string, string>("entry." + entry.ToString() + "_day", day));
                         }
-                        else if (type.Equals("Hour"))
+                        else if (type.Equals("Time"))
                         {
                             values.Add(new KeyValuePair<string, string>("entry." + entry.ToString() + "_hour", hour));
                             values.Add(new KeyValuePair<string, string>("entry." + entry.ToString() + "_minute", minute));
@@ -671,7 +685,7 @@ namespace AFGForm
                         }
                     }
 
-                    if (type.Equals("Day") || type.Equals("Hour"))
+                    if (type.Equals("Date") || type.Equals("Time"))
                     {
 
                     } else
@@ -864,9 +878,23 @@ namespace AFGForm
         {
             if (dataGridView1.Rows.Count > 0)
             {
-                foreach (DataGridViewRow row in dataGridView1.Rows)
+                bool isTickAll = true;
+
+                foreach (DataGridViewRow row in dataGridView1.Rows) {
+                
+                    if (!Convert.ToBoolean(row.Cells[5].Value))
+                    {
+                        isTickAll = false;
+                        row.Cells[5].Value = true;
+                    }
+                }
+
+                if (isTickAll)
                 {
-                    row.Cells[5].Value = true;
+                    foreach (DataGridViewRow row in dataGridView1.Rows)
+                    {
+                        row.Cells[5].Value = false;
+                    }
                 }
             }
         }
@@ -917,15 +945,41 @@ namespace AFGForm
         {
             if (dataGridView1.Rows.Count > 0)
             {
+                bool isTickAll = true;
+
                 foreach (DataGridViewRow row in dataGridView1.Rows)
                 {
                     if (row.Cells[6].ReadOnly)
                     {
                         continue;
                     }
-                    row.Cells[6].Value = true;
+
+                    if (!Convert.ToBoolean(row.Cells[6].Value))
+                    {
+                        isTickAll = false;
+                        row.Cells[6].Value = true;
+                    }
                 }
+
+                if (isTickAll)
+                {
+                    foreach (DataGridViewRow row in dataGridView1.Rows)
+                    {
+                        if (row.Cells[6].ReadOnly)
+                        {
+                            continue;
+                        }
+
+                        if (Convert.ToBoolean(row.Cells[6].Value))
+                        {
+                            row.Cells[6].Value = false;
+                        }
+                    }
+                }
+
             }
+
+            
         }
 
         private void numRepeat_TextChanged(object sender, EventArgs e)

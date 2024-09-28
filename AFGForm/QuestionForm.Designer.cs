@@ -32,6 +32,8 @@
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
             this.Answer = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Select = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+            this.contextDataGrid = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.addToolContextDataGrid = new System.Windows.Forms.ToolStripMenuItem();
             this.cbIgnore = new System.Windows.Forms.CheckBox();
             this.cbRandom = new System.Windows.Forms.CheckBox();
             this.label4 = new System.Windows.Forms.Label();
@@ -51,11 +53,12 @@
             this.lbOtherOption = new System.Windows.Forms.Label();
             this.tbInputType = new System.Windows.Forms.TextBox();
             this.label5 = new System.Windows.Forms.Label();
-            this.contextDataGrid = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.addToolContextDataGrid = new System.Windows.Forms.ToolStripMenuItem();
+            this.datePicker = new System.Windows.Forms.DateTimePicker();
+            this.timePicker = new System.Windows.Forms.DateTimePicker();
+            this.clearBtn = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
-            this.contextComboBox.SuspendLayout();
             this.contextDataGrid.SuspendLayout();
+            this.contextComboBox.SuspendLayout();
             this.SuspendLayout();
             // 
             // dataGridView1
@@ -88,6 +91,20 @@
             this.Select.HeaderText = "Select";
             this.Select.Name = "Select";
             this.Select.Width = 43;
+            // 
+            // contextDataGrid
+            // 
+            this.contextDataGrid.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.addToolContextDataGrid});
+            this.contextDataGrid.Name = "contextDataGrid";
+            this.contextDataGrid.Size = new System.Drawing.Size(97, 26);
+            // 
+            // addToolContextDataGrid
+            // 
+            this.addToolContextDataGrid.Name = "addToolContextDataGrid";
+            this.addToolContextDataGrid.Size = new System.Drawing.Size(96, 22);
+            this.addToolContextDataGrid.Text = "Add";
+            this.addToolContextDataGrid.Click += new System.EventHandler(this.addToolContextDataGrid_Click);
             // 
             // cbIgnore
             // 
@@ -140,6 +157,7 @@
             this.cbAnswer.Name = "cbAnswer";
             this.cbAnswer.Size = new System.Drawing.Size(627, 21);
             this.cbAnswer.TabIndex = 11;
+            this.cbAnswer.Visible = false;
             // 
             // contextComboBox
             // 
@@ -152,7 +170,7 @@
             // addToolContextComboBox
             // 
             this.addToolContextComboBox.Name = "addToolContextComboBox";
-            this.addToolContextComboBox.Size = new System.Drawing.Size(180, 22);
+            this.addToolContextComboBox.Size = new System.Drawing.Size(107, 22);
             this.addToolContextComboBox.Text = "Add";
             this.addToolContextComboBox.Click += new System.EventHandler(this.addToolContextComboBox_Click);
             // 
@@ -269,19 +287,44 @@
             this.label5.TabIndex = 26;
             this.label5.Text = "Input type: ";
             // 
-            // contextDataGrid
+            // datePicker
             // 
-            this.contextDataGrid.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.addToolContextDataGrid});
-            this.contextDataGrid.Name = "contextDataGrid";
-            this.contextDataGrid.Size = new System.Drawing.Size(97, 26);
+            this.datePicker.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.datePicker.Format = System.Windows.Forms.DateTimePickerFormat.Short;
+            this.datePicker.Location = new System.Drawing.Point(86, 86);
+            this.datePicker.MaxDate = new System.DateTime(2075, 12, 31, 0, 0, 0, 0);
+            this.datePicker.MinDate = new System.DateTime(1975, 1, 1, 0, 0, 0, 0);
+            this.datePicker.Name = "datePicker";
+            this.datePicker.Size = new System.Drawing.Size(151, 22);
+            this.datePicker.TabIndex = 28;
+            this.datePicker.Value = new System.DateTime(2024, 1, 1, 0, 0, 0, 0);
+            this.datePicker.Visible = false;
             // 
-            // addToolContextDataGrid
+            // timePicker
             // 
-            this.addToolContextDataGrid.Name = "addToolContextDataGrid";
-            this.addToolContextDataGrid.Size = new System.Drawing.Size(180, 22);
-            this.addToolContextDataGrid.Text = "Add";
-            this.addToolContextDataGrid.Click += new System.EventHandler(this.addToolContextDataGrid_Click);
+            this.timePicker.CustomFormat = "HH:mm";
+            this.timePicker.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.timePicker.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
+            this.timePicker.Location = new System.Drawing.Point(86, 86);
+            this.timePicker.MaxDate = new System.DateTime(1975, 12, 31, 0, 0, 0, 0);
+            this.timePicker.MinDate = new System.DateTime(1975, 1, 1, 0, 0, 0, 0);
+            this.timePicker.Name = "timePicker";
+            this.timePicker.ShowUpDown = true;
+            this.timePicker.Size = new System.Drawing.Size(115, 22);
+            this.timePicker.TabIndex = 29;
+            this.timePicker.Value = new System.DateTime(1975, 1, 1, 0, 0, 0, 0);
+            this.timePicker.Visible = false;
+            // 
+            // clearBtn
+            // 
+            this.clearBtn.ImeMode = System.Windows.Forms.ImeMode.NoControl;
+            this.clearBtn.Location = new System.Drawing.Point(476, 121);
+            this.clearBtn.Name = "clearBtn";
+            this.clearBtn.Size = new System.Drawing.Size(75, 23);
+            this.clearBtn.TabIndex = 30;
+            this.clearBtn.Text = "Clear";
+            this.clearBtn.UseVisualStyleBackColor = true;
+            this.clearBtn.Click += new System.EventHandler(this.clearBtn_Click);
             // 
             // QuestionForm
             // 
@@ -289,6 +332,9 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(747, 189);
             this.ControlBox = false;
+            this.Controls.Add(this.clearBtn);
+            this.Controls.Add(this.timePicker);
+            this.Controls.Add(this.datePicker);
             this.Controls.Add(this.tbInputType);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.lbOtherOption);
@@ -318,8 +364,8 @@
             this.Load += new System.EventHandler(this.QuestionForm_Load);
             this.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.QuestionForm_KeyPress);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
-            this.contextComboBox.ResumeLayout(false);
             this.contextDataGrid.ResumeLayout(false);
+            this.contextComboBox.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -351,5 +397,8 @@
         private System.Windows.Forms.ToolStripMenuItem deleteToolContextComboBox;
         private System.Windows.Forms.ContextMenuStrip contextDataGrid;
         private System.Windows.Forms.ToolStripMenuItem addToolContextDataGrid;
+        private System.Windows.Forms.DateTimePicker datePicker;
+        private System.Windows.Forms.DateTimePicker timePicker;
+        private System.Windows.Forms.Button clearBtn;
     }
 }
