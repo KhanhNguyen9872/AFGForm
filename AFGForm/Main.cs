@@ -268,6 +268,12 @@ namespace AFGForm
                                 case 4:
                                     tmp = "Multi select";
                                     break;
+                                case 9:
+                                    tmp = "Day";
+                                    break;
+                                case 10:
+                                    tmp = "Hour";
+                                    break;
                             }
                             row.Cells[2].Value = tmp;
                             continue;
@@ -395,6 +401,10 @@ namespace AFGForm
                         }
 
                         this.dataURL[id] = new Dictionary<string, List<string>>();
+                        if (question == null)
+                        {
+                            question = "<null> No question name";
+                        }
                         this.dataURL[id].Add(question, answer);
                         id = 0;
                         question = "";
@@ -505,67 +515,110 @@ namespace AFGForm
 
                     string answer = "";
 
+                    string day = "0";
+                    string month = "0";
+                    string year = "0";
+                    string hour = "0";
+                    string minute = "0";
+
                     var q = this.dataURL[entry][question];
                     int repeat = 0;
                     if (isRandom)
                     {
-                        if (q.Count > 0)
+                        if (type.Equals("Day"))
                         {
-                            int qCount = q.Count;
-
-                            if (isIgnore)
+                            year = random.Next(1975, 2075).ToString();
+                            month = random.Next(1, 13).ToString();
+                            int maxDay = 31;
+                            switch (month)
                             {
-                                qCount = qCount - 1;
+                                case "2":
+                                    maxDay = 28;
+                                    break;
+                                case "4":
+                                case "6":
+                                case "9":
+                                case "11":
+                                    maxDay = 30;
+                                    break;
+                            };
+                            day = random.Next(1, maxDay + 1).ToString();
+                        }
+                        else if (type.Equals("Hour"))
+                        {
+                            hour = random.Next(0, 24).ToString();
+                            minute = random.Next(0, 60).ToString();
+                            if (hour.Length == 1)
+                            {
+                                hour = "0" + hour;
                             }
-
-                            if (type.Equals("Multi select"))
+                            if (minute.Length == 1)
                             {
-                                repeat = random.Next(1, qCount);
+                                minute = "0" + minute;
+                            }
+                        } else
+                        {
+                            if (q.Count > 0)
+                            {
+                                int qCount = q.Count;
+
+                                if (isIgnore)
+                                {
+                                    qCount = qCount - 1;
+                                }
+
+                                if (type.Equals("Multi select"))
+                                {
+                                    repeat = random.Next(1, qCount);
+                                }
+                                else
+                                {
+                                    repeat = 1;
+                                }
+
+                                answer = "";
+                                for (int j = 0; j < repeat; j++)
+                                {
+                                    if (j > 0)
+                                    {
+                                        answer = answer + (char)0;
+                                    }
+
+                                    int rand;
+                                    do
+                                    {
+                                        rand = random.Next(0, qCount);
+                                        if (string.IsNullOrEmpty(q[rand]))
+                                        {
+                                            qCount = qCount - 1;
+                                            break;
+                                        }
+                                    } while (inStr(answer, q[rand]));
+
+                                    if (string.IsNullOrEmpty(q[rand]))
+                                    {
+                                        if (!isIgnore)
+                                        {
+                                            if (type.Equals("Multi select"))
+                                            {
+                                                answer = answer + this.randomString(random.Next(3, 30));
+                                            }
+                                            else
+                                            {
+                                                answer = this.randomString(random.Next(5, 30));
+                                            }
+                                        }
+                                    }
+                                    else
+                                    {
+                                        answer = answer + q[rand];
+                                    }
+                                }
                             }
                             else
                             {
-                                repeat = 1;
+                                answer = this.randomString(random.Next(5, 30));
                             }
-
-                            answer = "";
-                            for (int j = 0; j < repeat; j++)
-                            {
-                                if (j > 0)
-                                {
-                                    answer = answer + (char)0;
-                                }
-
-                                int rand;
-                                do
-                                {
-                                    rand = random.Next(0, qCount);
-                                    if (string.IsNullOrEmpty(q[rand]))
-                                    {
-                                        qCount = qCount - 1;
-                                        break;
-                                    }
-                                } while (inStr(answer, q[rand]));
-
-                                if (string.IsNullOrEmpty(q[rand])) {
-                                    if (!isIgnore)
-                                    {
-                                        if (type.Equals("Multi select"))
-                                        {
-                                            answer = answer + this.randomString(random.Next(3, 30));
-                                        } else
-                                        {
-                                            answer = this.randomString(random.Next(5, 30));
-                                        }
-                                    }
-                                } else
-                                {
-                                    answer = answer + q[rand];
-                                }
-                            }
-                        }
-                        else
-                        {
-                            answer = this.randomString(random.Next(5, 30));
                         }
                     }
                     else
@@ -582,7 +635,21 @@ namespace AFGForm
 
                     if (this.dataURL[entry][question].Count == 0)
                     {
-                        values.Add(new KeyValuePair<string, string>("entry." + entry.ToString(), answer));
+                        if (type.Equals("Day"))
+                        {
+                            values.Add(new KeyValuePair<string, string>("entry." + entry.ToString() + "_year", year));
+                            values.Add(new KeyValuePair<string, string>("entry." + entry.ToString() + "_month", month));
+                            values.Add(new KeyValuePair<string, string>("entry." + entry.ToString() + "_day", day));
+                        }
+                        else if (type.Equals("Hour"))
+                        {
+                            values.Add(new KeyValuePair<string, string>("entry." + entry.ToString() + "_hour", hour));
+                            values.Add(new KeyValuePair<string, string>("entry." + entry.ToString() + "_minute", minute));
+                        }
+                        else
+                        {
+                            values.Add(new KeyValuePair<string, string>("entry." + entry.ToString(), answer));
+                        };
                     }
                     else
                     {
@@ -598,11 +665,12 @@ namespace AFGForm
                                     values.Add(new KeyValuePair<string, string>("entry." + entry.ToString(), "__other_option__"));
                                 }
                             }
-                        } else
+                        } else 
                         {
                             values.Add(new KeyValuePair<string, string>("entry." + entry.ToString(), answer));
                         }
                     }
+
                     values.Add(new KeyValuePair<string, string>("entry." + entry.ToString() + "_sentinel", ""));
                 }
 
