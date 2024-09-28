@@ -671,7 +671,14 @@ namespace AFGForm
                         }
                     }
 
-                    values.Add(new KeyValuePair<string, string>("entry." + entry.ToString() + "_sentinel", ""));
+                    if (type.Equals("Day") || type.Equals("Hour"))
+                    {
+
+                    } else
+                    {
+                        values.Add(new KeyValuePair<string, string>("entry." + entry.ToString() + "_sentinel", ""));
+                    }
+                    
                 }
 
                 if (this.autoEmail)
@@ -689,6 +696,15 @@ namespace AFGForm
                 else
                 {
                     this.fail += 1;
+
+                    if ((response.StatusCode == System.Net.HttpStatusCode.InternalServerError))
+                    {
+                        this.reloadResult();
+                        this.buttonWhileStopped();
+                        this.thread = null;
+                        MessageBox.Show("Cannot submit form!", "InternalServerError", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
+                    }
 
                     if ((response.StatusCode == System.Net.HttpStatusCode.BadRequest) && (!ignoreBadRequest))
                     {
