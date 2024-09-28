@@ -622,23 +622,24 @@ namespace AFGForm
                     }
                     else
                     {
-                        if (type.Equals("Date"))
+                        if (data == null)
                         {
-                            answer = data.ToString();
-                            year = answer.Split('-')[0];
-                            month = answer.Split('-')[1];
-                            day = answer.Split('-')[2];
-                        } else if (type.Equals("Hour"))
-                        {
-                            answer = data.ToString();
-                            hour = answer.Split(':')[0];
-                            minute = answer.Split(':')[1];
+                            answer = "";
                         }
                         else
                         {
-                            if (data == null)
+                            if (type.Equals("Date"))
                             {
-                                answer = "";
+                                answer = data.ToString();
+                                year = answer.Split('-')[0];
+                                month = answer.Split('-')[1];
+                                day = answer.Split('-')[2];
+                            }
+                            else if (type.Equals("Hour"))
+                            {
+                                answer = data.ToString();
+                                hour = answer.Split(':')[0];
+                                minute = answer.Split(':')[1];
                             }
                             else
                             {
