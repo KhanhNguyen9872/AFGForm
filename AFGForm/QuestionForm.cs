@@ -338,11 +338,11 @@ namespace AFGForm
                         DataGridViewRow row = new DataGridViewRow();
                         row.CreateCells(dataGridView1);
                         
-                        // Truncate row label if too long (max 5 chars + "...")
+                        // Truncate row label if too long (max 55 chars + "...")
                         string displayLabel = rowLabel;
-                        if (displayLabel.Length > 5)
+                        if (displayLabel.Length > 55)
                         {
-                            displayLabel = displayLabel.Substring(0, 5) + "...";
+                            displayLabel = displayLabel.Substring(0, 55) + "...";
                         }
                         row.Cells[0].Value = displayLabel;
                         row.Cells[0].ToolTipText = rowLabel; // Show full text on hover
