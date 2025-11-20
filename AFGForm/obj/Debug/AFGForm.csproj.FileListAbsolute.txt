@@ -62,3 +62,4 @@ C:\Users\KhanhNguyen9872\Documents\GitHub\AFGForm\AFGForm\obj\Debug\en-US\AFGFor
 C:\Users\KhanhNguyen9872\Documents\GitHub\AFGForm\AFGForm\obj\Debug\AFGForm.csproj.Up2Date
 C:\Users\KhanhNguyen9872\Documents\GitHub\AFGForm\AFGForm\obj\Debug\AFGForm.exe
 C:\Users\KhanhNguyen9872\Documents\GitHub\AFGForm\AFGForm\obj\Debug\AFGForm.pdb
+C:\Users\khanhnguyen9872\Documents\GitHub\AFGForm\AFGForm\obj\Debug\AFGForm.exe.config

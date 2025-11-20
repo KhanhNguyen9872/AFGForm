@@ -16,6 +16,7 @@ namespace AFGForm
         private static Random random = new Random();
         private static readonly HttpClient client = new HttpClient();
         private Dictionary<long, Dictionary<string, List<string>>> dataURL;
+        private Dictionary<string, bool> randomAsRadioFlags = new Dictionary<string, bool>(); // Store "Random as radio box" flags
         private int success = 0, fail = 0;
         private Thread thread = null;
         private bool autoEmail = false;
@@ -34,7 +35,7 @@ namespace AFGForm
 
         private void Main_Load(object sender, EventArgs e)
         {
-            this.tbURL.Text = "https://docs.google.com/forms/d/e/1FAIpQLSeBshz5tDbwSB1I7cM_sk8SMjXsWo5qh3O7hB7SgIncqwRTKQ/viewform?usp=sf_link";
+            this.tbURL.Text = "https://forms.gle/om5BtVJyf5MtXAri6";
             this.reloadResult();
             this.buttonWhileStopped();
             btnStart.Enabled = false;
@@ -78,6 +79,14 @@ namespace AFGForm
 
             QuestionForm fm = new QuestionForm(id, entry, type, question, currentAnswer, this.dataURL, randomAnswer, ignoreOther);
             fm.disableIgnoreOther(ignoreOtherReadOnly);
+            
+            // Load "Random as radio box" flag if exists
+            string flagKey = entry.ToString() + "_" + question;
+            if (type.Equals("Multi choice/checkbox grid") && randomAsRadioFlags.ContainsKey(flagKey))
+            {
+                fm.setRandomAsRadioState(randomAsRadioFlags[flagKey]);
+            }
+            
             fm.ShowDialog();
 
             if (fm.isSuccess)
@@ -85,6 +94,12 @@ namespace AFGForm
                 dataGridView1.Rows[index].Cells[4].Value = fm.getCurrentAnswer();
                 dataGridView1.Rows[index].Cells[5].Value = fm.getRandomAnswer();
                 dataGridView1.Rows[index].Cells[6].Value = fm.getCbIgnore();
+                
+                // Save "Random as radio box" flag
+                if (type.Equals("Multi choice/checkbox grid"))
+                {
+                    randomAsRadioFlags[flagKey] = fm.getRandomAsRadio();
+                }
             }
         }
 
@@ -149,7 +164,7 @@ namespace AFGForm
                     }
 
                     tbURL.Text = url;
-                } catch (Exception ex)
+                } catch (Exception)
                 {
                     MessageBox.Show("Network error!", "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     fm.Dispose();
@@ -185,11 +200,30 @@ namespace AFGForm
                             newList = new List<string>();
                             foreach(var a1 in a0.Value)
                             {
+                                // Check if this is type 7 (Multi choice/checkbox grid)
+                                bool isType7 = false;
+                                if (a1.Value.Count > 0)
+                                {
+                                    try
+                                    {
+                                        int firstElement = Convert.ToInt32(a1.Value[0]);
+                                        if (firstElement == 7)
+                                        {
+                                            isType7 = true;
+                                        }
+                                    }
+                                    catch
+                                    {
+                                        // Not a number, not type 7
+                                    }
+                                }
+                                
                                 int count = -1;
                                 foreach(string a2 in a1.Value)
                                 {
                                     count = count + 1;
-                                    if (count == 0)
+                                    // Keep first element (type) for type 7, remove for others
+                                    if (count == 0 && !isType7)
                                     {
                                         continue;
                                     }
@@ -267,11 +301,20 @@ namespace AFGForm
                                 case 4:
                                     tmp = "Multi select";
                                     break;
+                                case 5:
+                                    tmp = "Linear range";
+                                    break;
+                                case 7:
+                                    tmp = "Multi choice/checkbox grid";
+                                    break;
                                 case 9:
                                     tmp = "Date";
                                     break;
                                 case 10:
                                     tmp = "Time";
+                                    break;
+                                case 18:
+                                    tmp = "Rating";
                                     break;
                             }
                             row.Cells[2].Value = tmp;
@@ -344,10 +387,17 @@ namespace AFGForm
                 int type = -1;
                 int c = 0;
                 long id = 0;
+                long mainId = 0;
                 string question = "";
                 List<string> answer = null;
-                foreach(var q in ques)
+                Dictionary<string, List<string>> answerGrid = new Dictionary<string, List<string>>();
+                foreach (var q in ques)
                 {
+                    if (c == 0)
+                    {
+                        mainId = q.GetInt64();
+                    }
+                    
                     if (c == 1)
                     {
                         question = q.GetString();
@@ -364,47 +414,216 @@ namespace AFGForm
                         {
                             break;
                         }
-                        var answ = q.EnumerateArray();
-                        foreach(var ans in answ)
-                        {
-                            int countAnswer = 0;
-                            foreach(var an in ans.EnumerateArray())
-                            {
-                                if (countAnswer == 0)
-                                {
-                                    id = an.GetInt64();
-                                }
 
-                                if (countAnswer == 1)
+                        var answ = q.EnumerateArray();
+                        
+                        if (type == 7)
+                        {
+                            // Parse grid structure
+                            answer = new List<string>();
+                            answer.Add(type.ToString());
+                            
+                            bool firstRow = true;
+                            List<string> columns = new List<string>();
+                            int gridType = 0; // 0 = Radio Grid, 1 = Checkbox Grid
+                            
+                            // First, get array length to identify last element
+                            int arrayLength = 0;
+                            foreach (var ans in answ)
+                            {
+                                if (firstRow)
                                 {
-                                    answer = new List<string>();
-                                    answer.Add(type.ToString());
-                                    if (an.ValueKind == JsonValueKind.Null)
+                                    foreach (var an in ans.EnumerateArray())
                                     {
+                                        arrayLength++;
+                                    }
+                                }
+                                break;
+                            }
+                            
+                            foreach (var ans in answ)
+                            {
+                                long rowEntryId = 0;
+                                string rowLabel = "";
+                                int countAnswer = 0;
+                                int rowGridType = 0;
+                                
+                                foreach (var an in ans.EnumerateArray())
+                                {
+                                    if (countAnswer == 0)
+                                    {
+                                        // Row entry ID
+                                        rowEntryId = an.GetInt64();
+                                    }
+                                    
+                                    if (countAnswer == 1)
+                                    {
+                                        // Columns (options) array
+                                        if (an.ValueKind == JsonValueKind.Null)
+                                        {
+                                            break;
+                                        }
+                                        
+                                        // Parse columns (options) - can be nested arrays
+                                        if (an.ValueKind == JsonValueKind.Array)
+                                        {
+                                            foreach (var an2 in an.EnumerateArray())
+                                            {
+                                                if (an2.ValueKind == JsonValueKind.Array)
+                                                {
+                                                    // Nested array: [["1"],["Cột 2"],...]
+                                                    foreach (var an3 in an2.EnumerateArray())
+                                                    {
+                                                        string colValue = an3.ToString();
+                                                        if (firstRow && !string.IsNullOrEmpty(colValue))
+                                                        {
+                                                            columns.Add(colValue);
+                                                        }
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    // Direct value
+                                                    string colValue = an2.ToString();
+                                                    if (firstRow && !string.IsNullOrEmpty(colValue))
+                                                    {
+                                                        columns.Add(colValue);
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                    
+                                    if (countAnswer == 3)
+                                    {
+                                        // Row label
+                                        if (an.ValueKind == JsonValueKind.Null)
+                                        {
+                                            break;
+                                        }
+                                        
+                                        // Parse row label - can be array or string
+                                        if (an.ValueKind == JsonValueKind.Array)
+                                        {
+                                            foreach (var an2 in an.EnumerateArray())
+                                            {
+                                                rowLabel = an2.ToString();
+                                                break;
+                                            }
+                                        }
+                                        else
+                                        {
+                                            rowLabel = an.ToString();
+                                        }
+                                    }
+                                    
+                                    // Check last element for grid type (usually at index 12 or last)
+                                    // Last element indicates grid type: [0] = Radio, [1] = Checkbox
+                                    if (countAnswer == arrayLength - 1)
+                                    {
+                                        if (an.ValueKind == JsonValueKind.Array)
+                                        {
+                                            foreach (var an2 in an.EnumerateArray())
+                                            {
+                                                rowGridType = an2.GetInt32();
+                                                if (firstRow)
+                                                {
+                                                    gridType = rowGridType;
+                                                }
+                                                break;
+                                            }
+                                        }
+                                        else if (an.ValueKind == JsonValueKind.Number)
+                                        {
+                                            rowGridType = an.GetInt32();
+                                            if (firstRow)
+                                            {
+                                                gridType = rowGridType;
+                                            }
+                                        }
+                                    }
+                                    
+                                    countAnswer += 1;
+                                }
+                                
+                                if (firstRow)
+                                {
+                                    // Add columns to answer (only from first row)
+                                    foreach (string col in columns)
+                                    {
+                                        answer.Add(col);
+                                    }
+                                    answer.Add("GRID_ROWS");
+                                    answer.Add("GRID_TYPE:" + gridType.ToString()); // Store grid type
+                                    firstRow = false;
+                                }
+                                
+                                // Add row entry ID and label
+                                if (rowEntryId != 0 && !string.IsNullOrEmpty(rowLabel))
+                                {
+                                    answer.Add(rowEntryId.ToString());
+                                    answer.Add(rowLabel);
+                                }
+                            }
+                            
+                            // Use main question ID for grid
+                            this.dataURL[mainId] = new Dictionary<string, List<string>>();
+                            if (question == null)
+                            {
+                                question = "<null> No question name";
+                            }
+                            this.dataURL[mainId].Add(question, answer);
+                        }
+                        else
+                        {
+                            // Original logic for other types
+                            foreach (var ans in answ)
+                            {
+                                int countAnswer = 0;
+                                answer = new List<string>();
+                                answer.Add(type.ToString());
+                                
+                                foreach (var an in ans.EnumerateArray())
+                                {
+                                    if (countAnswer == 0)
+                                    {
+                                        id = an.GetInt64();
+                                    }
+
+                                    if (countAnswer == 1)
+                                    {
+                                        if (an.ValueKind == JsonValueKind.Null)
+                                        {
+                                            break;
+                                        }
+
+                                        foreach (var an2 in an.EnumerateArray())
+                                        {
+                                            foreach (var an3 in an2.EnumerateArray())
+                                            {
+                                                answer.Add(an3.ToString());
+                                                break;
+                                            }
+                                        }
                                         break;
                                     }
 
-                                    foreach (var an2 in an.EnumerateArray())
-                                    {
-                                        foreach(var an3 in an2.EnumerateArray())
-                                        {
-                                            answer.Add(an3.ToString());
-                                            break;
-                                        }
-                                    }
-                                    break;
+                                    countAnswer += 1;
                                 }
 
-                                countAnswer += 1;
+                                this.dataURL[id] = new Dictionary<string, List<string>>();
+                                if (question == null)
+                                {
+                                    question = "<null> No question name";
+                                }
+                                this.dataURL[id].Add(question, answer);
+                                id = 0;
+                                question = "";
+                                answer = null;
+                                break;
                             }
                         }
-
-                        this.dataURL[id] = new Dictionary<string, List<string>>();
-                        if (question == null)
-                        {
-                            question = "<null> No question name";
-                        }
-                        this.dataURL[id].Add(question, answer);
+                        
                         id = 0;
                         question = "";
                         answer = null;
@@ -524,7 +743,104 @@ namespace AFGForm
                     int repeat = 0;
                     if (isRandom)
                     {
-                        if (type.Equals("Date"))
+                        if (type.Equals("Multi choice/checkbox grid"))
+                        {
+                            // Parse grid structure
+                            if (q.Count > 0 && q[0].Equals("7"))
+                            {
+                                List<string> columns = new List<string>();
+                                int gridRowsIndex = -1;
+                                int gridType = 0; // 0 = Radio, 1 = Checkbox
+                                
+                                for (int idx = 1; idx < q.Count; idx++)
+                                {
+                                    if (q[idx].Equals("GRID_ROWS"))
+                                    {
+                                        gridRowsIndex = idx;
+                                        // Check next element for grid type
+                                        if (idx + 1 < q.Count && q[idx + 1].StartsWith("GRID_TYPE:"))
+                                        {
+                                            string gridTypeStr = q[idx + 1].Replace("GRID_TYPE:", "");
+                                            try
+                                            {
+                                                gridType = Convert.ToInt32(gridTypeStr);
+                                            }
+                                            catch
+                                            {
+                                                gridType = 0;
+                                            }
+                                            gridRowsIndex = idx + 1;
+                                        }
+                                        break;
+                                    }
+                                    columns.Add(q[idx]);
+                                }
+                                
+                                if (gridRowsIndex > 0 && columns.Count > 0)
+                                {
+                                    answer = "";
+                                    bool isCheckboxGrid = (gridType == 1);
+                                    
+                                    // Check if "Random as radio box" flag is set
+                                    string flagKey = entry.ToString() + "_" + question;
+                                    bool randomAsRadio = false;
+                                    if (randomAsRadioFlags.ContainsKey(flagKey))
+                                    {
+                                        randomAsRadio = randomAsRadioFlags[flagKey];
+                                    }
+                                    
+                                    // Random select option(s) for each row
+                                    for (int idx = gridRowsIndex + 1; idx < q.Count; idx += 2)
+                                    {
+                                        if (idx + 1 >= q.Count) break;
+                                        
+                                        long rowEntryId = Convert.ToInt64(q[idx]);
+                                        
+                                        // If checkbox grid but randomAsRadio is true, treat as radio (select only 1)
+                                        if (isCheckboxGrid && !randomAsRadio)
+                                        {
+                                            // Checkbox grid: random select multiple columns (1 to all)
+                                            int numSelections = random.Next(1, columns.Count + 1);
+                                            
+                                            // Create a shuffled list of all columns to ensure unique selections
+                                            List<string> shuffledColumns = new List<string>(columns);
+                                            for (int shuffleIdx = shuffledColumns.Count - 1; shuffleIdx > 0; shuffleIdx--)
+                                            {
+                                                int j = random.Next(shuffleIdx + 1);
+                                                string temp = shuffledColumns[shuffleIdx];
+                                                shuffledColumns[shuffleIdx] = shuffledColumns[j];
+                                                shuffledColumns[j] = temp;
+                                            }
+                                            
+                                            // Select first numSelections from shuffled list
+                                            List<string> selectedOptions = shuffledColumns.GetRange(0, numSelections);
+                                            
+                                            if (selectedOptions.Count > 0)
+                                            {
+                                                if (!string.IsNullOrEmpty(answer))
+                                                {
+                                                    answer = answer + (char)0;
+                                                }
+                                                answer = answer + rowEntryId.ToString() + ":" + string.Join(",", selectedOptions);
+                                            }
+                                        }
+                                        else
+                                        {
+                                            // Radio grid OR checkbox grid with randomAsRadio flag: random select exactly one column
+                                            int randomColIndex = random.Next(0, columns.Count);
+                                            string selectedOption = columns[randomColIndex];
+                                            
+                                            if (!string.IsNullOrEmpty(answer))
+                                            {
+                                                answer = answer + (char)0;
+                                            }
+                                            answer = answer + rowEntryId.ToString() + ":" + selectedOption;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        else if (type.Equals("Date"))
                         {
                             year = random.Next(1975, 2075).ToString();
                             month = random.Next(1, 13).ToString();
@@ -648,7 +964,48 @@ namespace AFGForm
                         }
                     }
 
-                    if (this.dataURL[entry][question].Count == 0)
+                    if (type.Equals("Multi choice/checkbox grid"))
+                    {
+                        // Parse grid answer: format is "rowEntryId:option" or "rowEntryId:option1,option2,option3" separated by (char)0
+                        if (!string.IsNullOrEmpty(answer))
+                        {
+                            string[] gridAnswers = answer.Split((char)0);
+                            foreach (string gridAns in gridAnswers)
+                            {
+                                if (gridAns.Contains(":"))
+                                {
+                                    string[] parts = gridAns.Split(':');
+                                    if (parts.Length == 2)
+                                    {
+                                        long rowEntryId = Convert.ToInt64(parts[0]);
+                                        string optionsStr = parts[1];
+                                        
+                                        // Check if multiple options (checkbox grid) or single option (radio grid)
+                                        if (optionsStr.Contains(","))
+                                        {
+                                            // Checkbox grid: multiple options separated by comma
+                                            string[] options = optionsStr.Split(',');
+                                            foreach (string optionValue in options)
+                                            {
+                                                if (!string.IsNullOrEmpty(optionValue))
+                                                {
+                                                    values.Add(new KeyValuePair<string, string>("entry." + rowEntryId.ToString(), optionValue));
+                                                }
+                                            }
+                                        }
+                                        else
+                                        {
+                                            // Radio grid: single option
+                                            values.Add(new KeyValuePair<string, string>("entry." + rowEntryId.ToString(), optionsStr));
+                                        }
+                                        
+                                        values.Add(new KeyValuePair<string, string>("entry." + rowEntryId.ToString() + "_sentinel", ""));
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    else if (this.dataURL[entry][question].Count == 0)
                     {
                         if (type.Equals("Date"))
                         {
@@ -689,7 +1046,7 @@ namespace AFGForm
                     if (type.Equals("Date") || type.Equals("Time"))
                     {
 
-                    } else
+                    } else if (!type.Equals("Multi choice/checkbox grid"))
                     {
                         values.Add(new KeyValuePair<string, string>("entry." + entry.ToString() + "_sentinel", ""));
                     }
@@ -924,7 +1281,7 @@ namespace AFGForm
             {
                 try {
                     this.thread.Abort();
-                } catch (Exception ex)
+                } catch (Exception)
                 {
 
                 }
