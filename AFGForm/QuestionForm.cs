@@ -340,10 +340,10 @@ namespace AFGForm
                         
                         // Truncate row label if too long (max 55 chars + "...")
                         string displayLabel = rowLabel;
-                        if (displayLabel.Length > 55)
-                        {
-                            displayLabel = displayLabel.Substring(0, 55) + "...";
-                        }
+                        // if (displayLabel.Length > 55)
+                        // {
+                        //     displayLabel = displayLabel.Substring(0, 55) + "...";
+                        // }
                         row.Cells[0].Value = displayLabel;
                         row.Cells[0].ToolTipText = rowLabel; // Show full text on hover
                         row.Tag = rowEntryId; // Store row entry ID in Tag
