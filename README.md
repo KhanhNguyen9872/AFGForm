@@ -1,5 +1,4 @@
 <div align="center">
-  <img src="https://github.com/KhanhNguyen9872/AFGForm/raw/main/img/img000.png" alt="AFGForm Logo" width="500" />
   <h1>AFGForm</h1>
   <p><strong>Auto Filler Google Form</strong> <br /> A powerful tool to automate Google Form submissions with random or custom data.</p>
 </div>
@@ -18,6 +17,12 @@
 **AFGForm** (Auto Filler Google Form) is a Windows-based application designed to automate the process of filling and submitting Google Forms. Whether you need to test a form, generate sample data, or perform bulk submissions, AFGForm provides a user-friendly interface to manage and execute these tasks efficiently.
 
 It supports a wide range of question types including grids, linear scales, and date/time fields, allowing for realistic and varied data generation.
+
+## 📱 Screenshots
+
+<div align="center">
+    <img src="https://github.com/KhanhNguyen9872/AFGForm/raw/main/img/img000.png" alt="AFGForm Screenshot" width="800" />
+</div>
 
 ## ✨ Key Features
 
